@@ -6,6 +6,49 @@ Format: `## YYYY-MM-DD HH:MM` → opis + lista plików.
 
 ---
 
+## 2026-07-28 14:07
+Infrastruktura ACF w kodzie (deklaratywnie, D-012) + pierwsza grupa pól (slajdy hero).
+- `app/Acf/FieldGroup.php` — nowy: kontrakt grupy pól
+- `app/Acf/Acf.php` — nowy: moduł Bootable (strona opcji „Ustawienia motywu" + rejestr grup na `acf/init`, no-op bez ACF)
+- `app/Acf/Groups/HeroSlides.php` — nowy: repeater slajdów hero (eyebrow/title/text/image/cta/link)
+- `app/Theme.php` — dodano moduł `Acf` do `MODULES`
+- autoloader motywu przebudowany (`composer dump-autoload -o`)
+- `DECISIONS.md` — D-012; `CLAUDE.md` — reguła „ACF tylko w kodzie"; `ARCHITECTURE.md` — moduł Acf
+- weryfikacja: `php -l` OK; wymaga aktywnego ACF Pro, by pola pojawiły się w panelu
+
+## 2026-07-28 14:02
+ACF Pro 6.8.6 zainstalowany przez Composer do `wp-content/plugins/advanced-custom-fields-pro/`. Pozostaje aktywacja w WP.
+- `composer.lock` (web root) — nowy: zablokowane wersje (`composer/installers` 2.3.0, `wpengine/advanced-custom-fields-pro` 6.8.6) — do repo
+- `wp-content/plugins/advanced-custom-fields-pro/` — zainstalowane (ignorowane w git, D-011)
+- `auth.json` — uzupełniony kluczem (ignorowany, poza repo)
+- Do zrobienia: aktywacja wtyczki (WP admin lub `wp plugin activate advanced-custom-fields-pro`)
+
+## 2026-07-28 13:55
+Przygotowanie instalacji ACF Pro przez Composer (site-level). Instalacja czeka na klucz licencyjny.
+- `composer.json` (web root) — nowy: repozytorium connect ACF + `composer/installers` + `wpengine/advanced-custom-fields-pro`; installer-paths do `wp-content/plugins/`
+- `.gitignore` — dodano `auth.json`, `/vendor/`, `wp-content/plugins/advanced-custom-fields-pro/`
+- `DECISIONS.md` — dodano D-011
+- Pozostało (po podaniu klucza): `composer update` → wtyczka w `wp-content/plugins/`, aktywacja, ew. `composer.lock` do repo
+
+## 2026-07-28 13:51
+Front sklepu (design-first): strona główna z carouselem, kategoriami i ofertami specjalnymi. Build + typecheck zielone.
+- `front-page.php` — nowy: kompozycja strony głównej (3 sekcje)
+- `templates/parts/home/carousel.php` — nowy: hero carousel (Swiper), dane placeholder
+- `templates/parts/home/categories.php` — nowy: siatka kategorii
+- `templates/parts/home/offers.php` — nowy: karty ofert specjalnych (przeceny)
+- `resources/js/modules/hero-carousel.ts` — nowy: inicjalizacja Swipera (A11y, reduced-motion)
+- `resources/js/app.ts` — import i wywołanie `initHeroCarousel()`
+- `resources/css/app.css` — style paginacji Swipera + fallback bez JS
+- `package.json` — dodano `swiper`, `@types/node`
+- migracja klas do kanonicznego Tailwind v4 (carousel/categories/offers)
+- weryfikacja: `npm run typecheck` (EXIT 0), `npm run build` OK, `php -l` OK, IDE diagnostics czyste
+- Uwaga: przy wydaniu tej funkcji → bump motywu do 0.3.0 + tag `theme-v0.3.0` (decyzja właściciela, D-010)
+
+## 2026-07-28 13:27
+Zasada: brak automatycznych operacji git (commit/push/tag należą do właściciela).
+- `CLAUDE.md` — dodano sekcję „Git — NIE commituj ani nie pushuj automatycznie"
+- `DECISIONS.md` — dodano D-010
+
 ## 2026-07-28 13:23
 Zbudowanie fundamentu motywu `xton-shop` v0.2.0: OOP (PSR-4), Vite + Tailwind v4 + TS, DaisyUI, integracja WooCommerce. Zależności zainstalowane, build zweryfikowany.
 - `composer.json`, `package.json`, `vite.config.ts`, `tsconfig.json`, `.gitignore` (motyw) — nowe: konfiguracja narzędzi

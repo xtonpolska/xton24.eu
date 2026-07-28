@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace XtonShop;
 
+use XtonShop\Acf\Acf;
 use XtonShop\Assets\ViteAssets;
 use XtonShop\Setup\Cleanup;
 use XtonShop\Setup\Menus;
@@ -29,6 +30,7 @@ final class Theme
         Cleanup::class,
         ViteAssets::class,
         WooCommerce::class,
+        Acf::class,
     ];
 
     private function __construct()

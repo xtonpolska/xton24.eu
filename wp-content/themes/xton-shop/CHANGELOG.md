@@ -13,7 +13,16 @@ Zasady bumpowania:
 ---
 
 ## [Unreleased]
-- Kolejne szablony (single, page, archive, search) i bloki e-commerce z HyperUI.
+### Added
+- **Strona główna** (`front-page.php`) z trzema sekcjami (design-first, dane placeholder):
+  - **Hero carousel** na Swiper 11 (moduł TS `hero-carousel.ts`): autoplay z pauzą, klawiatura, A11y, wyłączenie przy `prefers-reduced-motion`, progresywne wzbogacanie (1 slajd bez JS).
+  - **Kategorie** — responsywna siatka kafli (2/3/6 kolumn).
+  - **Oferty specjalne** — karty produktów z badge przeceny, oceną, ceną promocyjną, CTA.
+- Zależności front-end: `swiper`, `@types/node`.
+- **Integracja ACF Pro w kodzie** (deklaratywnie, D-012): moduł `Acf\Acf` (strona opcji „Ustawienia motywu"), kontrakt `Acf\FieldGroup`, grupa `Groups\HeroSlides` (repeater slajdów hero) — gotowe do podpięcia carousela.
+- Sekcje iterują po tablicach PHP (`$slides`/`$categories`/`$offers`) — gotowe do podpięcia pod WooCommerce bez zmian markупu.
+- Migracja klas do kanonicznego Tailwind v4 (`bg-linear-*`, skala odstępów, sufiks `!`).
+- Kolejne szablony (single, page, archive, search) i bloki e-commerce z HyperUI. *(planowane)*
 
 ## [0.2.0] — 2026-07-28
 ### Added

@@ -58,6 +58,26 @@ Format wpisu: data, decyzja, kontekst/uzasadnienie, status.
 - **Uzasadnienie:** Środek między lekkością Daisy a bogactwem gotowych bloków; dużo darmowych komponentów e-commerce bez narzutu JS.
 - **Status:** ✅ Przyjęta
 
+### D-010 — Operacje git tylko na decyzję właściciela
+- **Data:** 2026-07-28
+- **Decyzja:** Claude **nie** commituje ani **nie** pushuje automatycznie. Może przygotowywać zmiany w plikach i **sugerować** komendy git, ale wykonanie `commit`/`push`/`tag` należy do właściciela. Komendy tylko do odczytu (`status`, `diff`, `log`) są dozwolone.
+- **Uzasadnienie:** Pełna kontrola właściciela nad historią repo.
+- **Status:** ✅ Przyjęta
+
+### D-011 — ACF Pro przez Composer (wtyczki site-level)
+- **Data:** 2026-07-28
+- **Decyzja:** Zaawansowane pola tworzymy w **ACF Pro**. Wtyczki premium zarządzamy przez **root `composer.json`** (web root) z `composer/installers` — ACF Pro instalowane z repozytorium WP Engine `https://connect.advancedcustomfields.com` do `wp-content/plugins/advanced-custom-fields-pro/`.
+- **Wersjonowanie:** commitujemy `composer.json` + `composer.lock` (reprodukowalność). **Nie** commitujemy samej wtyczki (płatna, licencja) ani `auth.json` (sekret) — są w `.gitignore`. Odtworzenie: `composer install` z kluczem w `auth.json`.
+- **Uzasadnienie:** Powtarzalne, wersjonowane zarządzanie wtyczkami; brak binariów w repo; klucz licencyjny poza repo.
+- **Status:** ✅ Przyjęta
+
+### D-012 — Pola ACF deklaratywnie w kodzie (nie w panelu)
+- **Data:** 2026-07-28
+- **Decyzja:** Wszystkie grupy pól i strony opcji ACF definiujemy **w kodzie** (`acf_add_local_field_group()` / `acf_add_options_page()` na hooku `acf/init`), wersjonowane w repo. **Nie** tworzymy ich w panelu. Panel służy wyłącznie do wypełniania treści.
+- **Realizacja:** moduł `app/Acf/Acf.php` (Bootable), kontrakt `app/Acf/FieldGroup.php`, definicje w `app/Acf/Groups/`. Pierwsza grupa: `HeroSlides` (repeater na stronie opcji „Ustawienia motywu") — zasili carousel.
+- **Uzasadnienie:** Powtarzalność, przenośność między środowiskami, kod-review, brak rozjazdu DB↔kod, brak „klikologii".
+- **Status:** ✅ Przyjęta
+
 ---
 
 ## Decyzje otwarte / do podjęcia
@@ -68,4 +88,4 @@ Format wpisu: data, decyzja, kontekst/uzasadnienie, status.
 
 ---
 
-*Aktualizowane automatycznie. Ostatnia aktualizacja: 2026-07-28 13:23.*
+*Aktualizowane automatycznie. Ostatnia aktualizacja: 2026-07-28 14:07.*

@@ -70,14 +70,23 @@ app/
 ├── Theme.php                      // bootstrap, rejestr modułów
 ├── Support/Contracts/Bootable.php // interfejs modułu
 ├── Assets/ViteAssets.php          // ładowanie hashowanych assetów (manifest + HMR)
-└── Setup/
-    ├── ThemeSupport.php           // add_theme_support (WP + WooCommerce)
-    ├── Menus.php                  // register_nav_menus (primary, footer)
-    ├── Cleanup.php                // czyszczenie <head>, wyłączenie emoji (perf)
-    └── WooCommerce.php            // własne wrappery treści sklepu
+├── Setup/
+│   ├── ThemeSupport.php           // add_theme_support (WP + WooCommerce)
+│   ├── Menus.php                  // register_nav_menus (primary, footer)
+│   ├── Cleanup.php                // czyszczenie <head>, wyłączenie emoji (perf)
+│   └── WooCommerce.php            // własne wrappery treści sklepu
+└── Acf/
+    ├── Acf.php                    // Bootable: options page + rejestr grup (acf/init)
+    ├── FieldGroup.php             // kontrakt: definition(): array
+    └── Groups/
+        └── HeroSlides.php         // repeater slajdów hero (strona opcji)
 ```
 
-Szablony klasyczne: `index.php`, `header.php`, `footer.php`, części w `templates/parts/`.
+**ACF Pro — pola deklaratywnie w kodzie (D-011, D-012).** ACF Pro instalowany przez root `composer.json`. Grupy pól rejestrujemy w kodzie (`acf_add_local_field_group()` na `acf/init`) — nigdy w panelu. Nowa grupa = klasa w `app/Acf/Groups/` implementująca `FieldGroup`, dodana do `Acf::GROUPS`. Globalne ustawienia trzyma strona opcji „Ustawienia motywu" (`Acf::OPTIONS_SLUG`). Moduł jest no-op, gdy ACF nieaktywny.
+
+Szablony klasyczne: `index.php`, `front-page.php`, `header.php`, `footer.php`, części w `templates/parts/`.
+
+Strona główna (`front-page.php`) składa sekcje z `templates/parts/home/` (`carousel.php`, `categories.php`, `offers.php`). Etap **design-first**: każda sekcja renderuje markup, iterując po tablicy PHP (`$slides`/`$categories`/`$offers`) z danymi placeholder — podpięcie pod WooCommerce (np. `get_terms('product_cat')`, `wc_get_product_ids_on_sale()`) polega na podmianie źródła tablicy, bez zmian markупu. Interaktywny hero to Swiper 11 inicjowany w `resources/js/modules/hero-carousel.ts` (A11y, `prefers-reduced-motion`, progresywne wzbogacanie).
 
 ### 5.2 Build front-end (Vite + Tailwind v4 + TypeScript)
 
@@ -121,4 +130,4 @@ Szablony klasyczne: `index.php`, `header.php`, `footer.php`, części w `templat
 
 ---
 
-*Aktualizowane automatycznie. Ostatnia aktualizacja: 2026-07-28 13:23.*
+*Aktualizowane automatycznie. Ostatnia aktualizacja: 2026-07-28 14:07.*

@@ -1,0 +1,29 @@
+{
+    "name": "xtonpolska/xton24-site",
+    "description": "Zależności site-level (wtyczki premium) dla sklepu xton24.eu, zarządzane przez Composer.",
+    "type": "project",
+    "license": "proprietary",
+    "require": {
+        "composer/installers": "^2.3",
+        "wpengine/advanced-custom-fields-pro": "*"
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://connect.advancedcustomfields.com"
+        }
+    ],
+    "extra": {
+        "installer-paths": {
+            "wp-content/plugins/{$name}/": ["type:wordpress-plugin"],
+            "wp-content/mu-plugins/{$name}/": ["type:wordpress-muplugin"]
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true
+        },
+        "optimize-autoloader": true,
+        "sort-packages": true
+    }
+}

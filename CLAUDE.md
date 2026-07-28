@@ -13,8 +13,16 @@ Projekt utrzymuje trzy pliki dokumentacji w web roocie. **Aktualizuj je automaty
 Zasady prowadzenia:
 - Pobieraj realną datę/godzinę komendą (`date "+%Y-%m-%d %H:%M"`) — nie zgaduj czasu.
 - Najnowsze wpisy w CHANGELOG na górze. Aktualizuj stopkę „Ostatnia aktualizacja" w ARCHITECTURE/DECISIONS.
-- Dołączaj te pliki do commitów razem ze zmianami, których dotyczą.
 - Język dokumentacji: polski (zgodnie z komunikacją z właścicielem).
+
+## Git — NIE commituj ani nie pushuj automatycznie (WAŻNE, D-010)
+
+**Wszystkie operacje git należą do właściciela.** Nigdy nie uruchamiaj `git commit`, `git push`, `git tag`, `git reset` ani innych komend zmieniających stan repo bez wyraźnej prośby.
+
+- Rób zmiany w plikach normalnie (Write/Edit) — to jest OK.
+- Aktualizuj dokumentację (ARCHITECTURE/DECISIONS/CHANGELOG) tak jak dotąd — ale **nie commituj jej**.
+- Po zakończeniu pracy **zaproponuj** gotowe komendy (commit z sensownym message, tag, push), żeby właściciel mógł je wykonać lub zatwierdzić.
+- Wyjątek: komendy tylko do odczytu (`git status`, `git diff`, `git log`) są dozwolone.
 
 ## What this is
 
@@ -65,5 +73,6 @@ composer lint                                      # PHPCS (WPCS)
 - **Never modify WordPress core** — `wp-admin/`, `wp-includes/`, and the root `wp-*.php` files are overwritten on every WordPress update. All custom work belongs in `wp-content/` (the `xton-shop` theme, and any future `plugins/` or `mu-plugins/`).
 - New theme code goes in `wp-content/themes/xton-shop/` — a **classic, OOP theme** (decyzja D-006). Logika w klasach PSR-4 pod `app/` (namespace `XtonShop\`), rejestrowanych jako moduły `Bootable` w `app/Theme.php`; szablony klasyczne w korzeniu i `templates/`. Nowy moduł: utwórz klasę implementującą `Support\Contracts\Bootable` i dodaj ją do `Theme::MODULES`. Klasy Tailwind używane w PHP muszą być objęte `@source` w `resources/css/app.css`.
 - Nadpisywanie szablonów WooCommerce: kopiuj do `wp-content/themes/xton-shop/woocommerce/`, nigdy nie edytuj w katalogu wtyczki.
+- **Pola ACF wyłącznie w kodzie** (decyzja D-012): definiuj grupy przez `acf_add_local_field_group()` na hooku `acf/init`, jako klasy w `app/Acf/Groups/` implementujące `Acf\FieldGroup`, dodane do `Acf\Acf::GROUPS`. **Nigdy** nie twórz pól w panelu WP. Klucze `key` muszą być unikalne i stabilne (prefiks `group_`/`field_xton_`). ACF Pro zarządzany przez root `composer.json` (D-011).
 - Don't edit files under `../../conf/` directly; change server/PHP settings through the Local app so they survive regeneration.
 - The root `wp-config.php` is environment-specific (local DB creds, salts) — keep it out of anything that would be shared or committed.

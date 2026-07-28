@@ -1,4 +1,5 @@
 import '../css/app.css';
+import { initHeroCarousel } from './modules/hero-carousel';
 
 /**
  * Punkt wejścia front-endu motywu xton-shop.
@@ -18,4 +19,6 @@ onReady(() => {
     // Sygnalizuje CSS, że JS jest aktywny (np. do ulepszeń wymagających skryptu).
     document.documentElement.classList.remove('no-js');
     document.documentElement.classList.add('js');
+
+    initHeroCarousel();
 });

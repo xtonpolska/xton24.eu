@@ -19,3 +19,20 @@
  * szablonów w templates/ i stylujemy klasami Tailwind/DaisyUI, zachowując
  * pełną kontrolę nad semantyką i dostępnością (a11y).
  */
+
+/* Swiper — kropki paginacji na tle gradientu hero. */
+.hero-swiper {
+    --swiper-pagination-color: #fff;
+    --swiper-pagination-bullet-inactive-color: #fff;
+    --swiper-pagination-bullet-inactive-opacity: 0.45;
+    --swiper-pagination-bullet-size: 9px;
+}
+
+/* Progresywne wzbogacanie: zanim JS zainicjuje Swiper, pokaż tylko 1 slajd
+   (bez pionowego ułożenia wszystkich slajdów). */
+.no-js .hero-swiper .swiper-wrapper {
+    display: block;
+}
+.no-js .hero-swiper .swiper-slide:not(:first-child) {
+    display: none;
+}
