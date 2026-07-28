@@ -78,6 +78,42 @@ Format wpisu: data, decyzja, kontekst/uzasadnienie, status.
 - **Uzasadnienie:** Powtarzalność, przenośność między środowiskami, kod-review, brak rozjazdu DB↔kod, brak „klikologii".
 - **Status:** ✅ Przyjęta
 
+### D-013 — Design tokens XTON + sklep jasny
+- **Data:** 2026-07-28
+- **Decyzja:** Identyfikacja wizualna wg referencji Figma (XTON homepage marketing). Sklep **jasny** (lepszy UX/konwersja/zaufanie), z brandingiem XTON jako akcenty. Tokeny:
+  - **Fonty:** **Kanit** (font podstawowy, waga **400**; dostępne 300/400/500/600) + **Russo One** (font display, **wyłącznie waga 400** — brak pogrubienia, bez faux-bold). **Self-hosted** (woff2, latin+latin-ext).
+  - **Kolory:** primary żółć **#FFD600**, pomarańcz **#FFA600** (gradient CTA), ink **#171717**, light **#FAFAFA**.
+  - **Radiusy:** 5px (pola/przyciski), bordery cienkie (1px).
+- **Realizacja:** motyw DaisyUI `xton` (jasny), tokeny `@theme` w `resources/css/app.css`. *(Pierwotnie z opcjonalnym `xton-dark` — usunięty w D-014.)*
+- **Źródło:** Figma `SeyTSejhtBQWSPRSGIZHR0`, node `2232-3880` (Figma MCP).
+- **Status:** ✅ Przyjęta
+
+---
+
+### D-014 — Sklep wyłącznie w trybie jasnym (light mode)
+- **Data:** 2026-07-28
+- **Decyzja:** Sklep prowadzimy **wyłącznie w light mode**. Usunięty motyw DaisyUI `xton-dark` oraz wyłączone wbudowane motywy DaisyUI (`@plugin "daisyui" { themes: false; }`) — inaczej wbudowany `dark` (z `prefersdark`) nadpisywał `xton` przy systemowym `prefers-color-scheme: dark`. `xton` (jasny) jest jedynym motywem i aplikuje się na `:root` zawsze.
+- **Uzasadnienie:** spójność wizualna z brandingiem XTON, prostsze utrzymanie (jeden zestaw tokenów), lepsza kontrola konwersji. Doprecyzowuje D-013.
+- **Status:** ✅ Przyjęta
+
+---
+
+### D-015 — Skasowanie sekcji strony głównej (design-first) i odbudowa wg XTON
+- **Data:** 2026-07-28
+- **Decyzja:** Usunięte wszystkie sekcje strony głównej zbudowane na etapie design-first (hero carousel, kategorie, oferty specjalne) — nie oddawały brandu XTON. Wraz z nimi skasowany kod pomocniczy: moduł `hero-carousel.ts`, zależność **Swiper**, grupa ACF `HeroSlides`, CSS Swipera. `front-page.php` = czysty szkielet.
+- **Uzasadnienie:** placeholderowy layout był niezgodny z identyfikacją XTON; zamiast poprawiać, budujemy stronę główną od nowa wg referencji Figma. Infrastruktura (Vite, DaisyUI, moduł ACF, tokeny) pozostaje.
+- **Status:** ✅ Przyjęta
+
+---
+
+### D-016 — Figma jako referencja (nie 1:1); header w light mode
+- **Data:** 2026-07-28
+- **Decyzja:** Plik Figma (XTON homepage — marketing) traktujemy jako **referencję wizualną, nie makietę 1:1**. Kopiujemy wybrane elementy i dostosowujemy je do potrzeb **sklepu** (nie strony firmowej). Header zaimplementowany wg sekcji Figma (node `2401-10874`), ale w wariancie **jasnym** (spójnie z D-014) — ikony/logo z Figmy przekolorowane na `currentColor`.
+- **Uzasadnienie:** Figma to projekt strony marketingowej; sklep ma inne priorytety (konwersja, listingi, koszyk). Bierzemy branding i wybrane sekcje, resztę projektujemy pod e-commerce.
+- **Konwencja `.container`:** globalnie wycentrowany, `max-width 1440px`, padding `24px` (mobile) / `32px` (desktop ≥1024px).
+- **Źródło:** Figma `SeyTSejhtBQWSPRSGIZHR0`, node `2401-10874` (Figma MCP).
+- **Status:** ✅ Przyjęta
+
 ---
 
 ## Decyzje otwarte / do podjęcia
@@ -88,4 +124,4 @@ Format wpisu: data, decyzja, kontekst/uzasadnienie, status.
 
 ---
 
-*Aktualizowane automatycznie. Ostatnia aktualizacja: 2026-07-28 14:07.*
+*Aktualizowane automatycznie. Ostatnia aktualizacja: 2026-07-28 16:09.*

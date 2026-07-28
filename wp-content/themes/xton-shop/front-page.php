@@ -1,15 +1,10 @@
 <?php
 
 /**
- * Template Name: Strona główna sklepu
+ * Strona główna sklepu.
  *
- * Strona główna sklepu — używana automatycznie dla front page,
- * a także dostępna jako szablon strony (Page Attributes → Szablon),
- * do którego przypięte są pola ACF „Hero — slajdy".
- *
- * Sekcje: hero carousel → kategorie → oferty specjalne.
- * Etap: design-first (dane placeholder). Podpięcie pod WooCommerce później —
- * markup iteruje po tablicach, więc wystarczy podmienić źródło danych.
+ * Czysty szkielet — dotychczasowe sekcje (hero/kategorie/oferty) usunięte,
+ * bo nie oddawały brandu XTON. Do zbudowania od nowa wg referencji Figma.
  *
  * @package XtonShop
  */
@@ -20,11 +15,7 @@ get_header();
 ?>
 
 <main id="main" role="main">
-    <?php
-    get_template_part('templates/parts/home/carousel');
-    get_template_part('templates/parts/home/categories');
-    get_template_part('templates/parts/home/offers');
-    ?>
+    <?php // TODO(xton): zbudować sekcje strony głównej wg designu XTON. ?>
 </main>
 
 <?php

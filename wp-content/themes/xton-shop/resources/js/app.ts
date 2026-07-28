@@ -1,5 +1,6 @@
+import '../css/fonts.css';
 import '../css/app.css';
-import { initHeroCarousel } from './modules/hero-carousel';
+import { initHeaderNav } from './modules/header-nav';
 
 /**
  * Punkt wejścia front-endu motywu xton-shop.
@@ -20,5 +21,5 @@ onReady(() => {
     document.documentElement.classList.remove('no-js');
     document.documentElement.classList.add('js');
 
-    initHeroCarousel();
+    initHeaderNav();
 });

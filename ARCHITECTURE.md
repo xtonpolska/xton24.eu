@@ -22,6 +22,8 @@ Sklep e-commerce **xton24.eu** na stacku WordPress + WooCommerce, rozwijany loka
 | Środowisko dev     | Local by Flywheel (Windows)                   |
 | Motyw własny       | `xton-shop` (klasyczny, OOP)                  |
 | Build front-end    | Vite 6, Tailwind CSS v4, TypeScript, DaisyUI  |
+| Fonty (self-host)  | Russo One (nagłówki), Kanit (treść)           |
+| Design tokens      | wg Figmy XTON (D-013) — sklep jasny + akcenty |
 | Menedżery pakietów | Composer (PHP, PSR-4), npm (JS)               |
 
 ## 3. Struktura repozytorium
@@ -76,19 +78,29 @@ app/
 │   ├── Cleanup.php                // czyszczenie <head>, wyłączenie emoji (perf)
 │   └── WooCommerce.php            // własne wrappery treści sklepu
 └── Acf/
-    ├── Acf.php                    // Bootable: options page + rejestr grup (acf/init)
-    ├── FieldGroup.php             // kontrakt: definition(): array
-    └── Groups/
-        └── HeroSlides.php         // repeater slajdów hero (szablon front-page.php)
+    ├── Acf.php                    // Bootable: rejestr grup (acf/init)
+    └── FieldGroup.php             // kontrakt: definition(): array
 ```
 
 **ACF Pro — pola deklaratywnie w kodzie (D-011, D-012).** ACF Pro instalowany przez root `composer.json`. Grupy pól rejestrujemy w kodzie (`acf_add_local_field_group()` na `acf/init`) — nigdy w panelu. Nowa grupa = klasa w `app/Acf/Groups/` implementująca `FieldGroup`, dodana do `Acf::GROUPS`. Moduł jest no-op, gdy ACF nieaktywny.
 
-Lokalizacje pól: grupa `HeroSlides` jest przypięta do **szablonu strony** `front-page.php` (`page_template == front-page.php`) — pola pojawiają się przy edycji strony z tym szablonem. Strona opcji „Ustawienia motywu" (`Acf::OPTIONS_SLUG`) pozostaje jako kontener na przyszłe ustawienia globalne (obecnie bez grup).
+Obecnie brak zdefiniowanych grup pól (`Acf::GROUPS` jest pusta) — grupa `HeroSlides` została usunięta wraz z sekcjami strony głównej (D-015). Nową grupę dodaje się jako klasę w `app/Acf/Groups/`. (Strona opcji „Ustawienia motywu" również usunięta — dodamy, gdy pojawią się ustawienia globalne.)
 
-Szablony klasyczne: `index.php`, `front-page.php` (także Page Template „Strona główna sklepu"), `header.php`, `footer.php`, części w `templates/parts/`.
+Szablony klasyczne: `index.php`, `front-page.php`, `header.php`, `footer.php`, części w `templates/parts/`.
 
-Strona główna (`front-page.php`) składa sekcje z `templates/parts/home/` (`carousel.php`, `categories.php`, `offers.php`). Etap **design-first**: każda sekcja renderuje markup, iterując po tablicy PHP (`$slides`/`$categories`/`$offers`) z danymi placeholder — podpięcie pod WooCommerce (np. `get_terms('product_cat')`, `wc_get_product_ids_on_sale()`) polega na podmianie źródła tablicy, bez zmian markупu. Interaktywny hero to Swiper 11 inicjowany w `resources/js/modules/hero-carousel.ts` (A11y, `prefers-reduced-motion`, progresywne wzbogacanie).
+Strona główna (`front-page.php`) to obecnie **czysty szkielet** (`<main>` bez treści) — pierwotne sekcje design-first (hero carousel, kategorie, oferty) usunięto jako nie-„xtonowe" (D-015). Do odbudowy od nowa wg referencji Figma XTON.
+
+**Helpery szablonów (`functions.php`):** `xton_asset($rel)` — URL statycznego assetu z `assets/` + cache-busting po `XTON_SHOP_VERSION`; `xton_inline_svg($rel)` — inline'uje SVG z `assets/` (zaufane pliki motywu) tak, że ikony używają `currentColor`; `xton_primary_menu_fallback()` — fallback menu `primary`, gdy nie przypisano menu w panelu.
+
+**Assety statyczne** (`assets/`, poza pipeline'em Vite): `img/` (logo) i `icons/` (SVG). Pobrane z Figmy i przekolorowane na `currentColor`, żeby kolorem sterował CSS (light mode, D-014/D-016).
+
+### 5.1.1 Header (D-016, light mode)
+
+`header.php` odwzorowuje sekcję nagłówka z Figmy (node `2401-10874`) w wariancie jasnym:
+- **Górny pasek** (`.site-header__topbar`): e-mail, telefon, godziny + placeholder zmiany języka (TODO: i18n, np. Polylang).
+- **Główny pasek**: logo (`xton_inline_svg`) → nawigacja `primary` (`wp_nav_menu` + fallback) → ikony social.
+- **Responsywność:** `<1024px` nawigacja chowa się pod hamburgerem (`.site-nav-toggle`) i rozwija jako panel (`.primary-navigation.is-open`); sterowanie: `resources/js/modules/header-nav.ts` (a11y: `aria-expanded`, Escape, klik poza, reset przy powrocie na desktop). Podmenu: flyout na desktopie (`:hover`/`:focus-within`), inline na mobile.
+- Style nawigacji i **globalny `.container`** (wycentrowany, `max-width 1440px`, padding `24px`/`32px`) w `resources/css/app.css` (reguły poza `@layer`, by wygrywały z utilities).
 
 ### 5.2 Build front-end (Vite + Tailwind v4 + TypeScript)
 
@@ -98,18 +110,27 @@ Strona główna (`front-page.php`) składa sekcje z `templates/parts/home/` (`ca
 - **Tryb dev (HMR):** `npm run dev` uruchamia serwer Vite (port 5173) i zapisuje `dist/hot`; `ViteAssets` wykrywa ten plik i ładuje moduły z serwera dev zamiast z manifestu. Inline plugin w `vite.config.ts` tworzy/usuwa `dist/hot`.
 - Skrypty ładowane jako `type="module"` (filtr `script_loader_tag`).
 
-### 5.3 Komponenty UI (D-009)
+### 5.3 Design tokens / branding (D-013)
+
+Identyfikacja wizualna XTON (z Figmy) jako tokeny w `resources/css/app.css`:
+- **Fonty (self-hosted, `resources/fonts/*.woff2`, latin+latin-ext):** `Russo One` (nagłówki, token `--font-display`) + `Kanit` 300/500/600 (treść, `--font-sans`). Ładowane przez `resources/css/fonts.css` (import w `app.ts` → Vite hashuje woff2).
+- **Motyw DaisyUI:** `xton` (jasny) — **jedyny** motyw; sklep prowadzony wyłącznie w light mode (D-014), systemowy dark mode nie przełącza wyglądu.
+- **Kolory marki:** primary `#FFD600` (żółć), secondary/accent `#FFA600` (pomarańcz), base dark `#171717`, tekst `#FAFAFA`. CTA gradient przez `.btn-xton`. Dodatkowo utilities `bg-xton-*`/`text-xton-*` (`@theme`).
+- **Kształt:** radiusy 5px (`--radius-field/-selector`), box 8px, bordery 1px.
+- **Skala:** `--text-display` (61px, Russo One), `--text-lead` (20px).
+
+### 5.4 Komponenty UI (D-009)
 
 - **DaisyUI** (CSS-only, bez JS) — baza komponentów i motywowanie (`data-theme`).
 - **HyperUI** (MIT, copy-paste) — źródło darmowych bloków e-commerce; markup wklejany do `templates/` i stylowany klasami Tailwind/DaisyUI, z dbałością o a11y.
 
-### 5.4 Integracja WooCommerce
+### 5.5 Integracja WooCommerce
 
 - `add_theme_support('woocommerce')` + galeria (zoom/lightbox/slider) w `ThemeSupport`.
 - `Setup\WooCommerce` podmienia domyślne wrappery (`woocommerce_before/after_main_content`) na markup layoutu motywu; aktywne tylko gdy WooCommerce działa.
 - Nadpisywanie szablonów WooCommerce: kopie do `xton-shop/woocommerce/` (nigdy edycja w katalogu wtyczki).
 
-### 5.5 Wydajność / SEO / dostępność
+### 5.6 Wydajność / SEO / dostępność
 
 - Perf: `Cleanup` usuwa zbędne meta i emoji; moduły JS są deferowane; assety hashowane (długi cache).
 - SEO: `title-tag`, semantyczny HTML, poprawna hierarchia nagłówków. Warstwa schema/OG → O-004.
@@ -132,4 +153,4 @@ Strona główna (`front-page.php`) składa sekcje z `templates/parts/home/` (`ca
 
 ---
 
-*Aktualizowane automatycznie. Ostatnia aktualizacja: 2026-07-28 14:13.*
+*Aktualizowane automatycznie. Ostatnia aktualizacja: 2026-07-28 16:09.*

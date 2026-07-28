@@ -1,8 +1,102 @@
 @import "tailwindcss";
 
-/* DaisyUI jako baza komponentów (plugin, CSS-only, bez JS). */
+/*
+ * ==========================================================================
+ *  DESIGN TOKENS XTON (z referencji Figma — homepage marketing)
+ *  Fonty: Russo One (nagłówki) + Kanit (treść). Marka: żółć #FFD600 →
+ *  pomarańcz #FFA600, baza dark #171717, tekst #FAFAFA. Radiusy 5px.
+ * ==========================================================================
+ */
+
+/*
+ * Wyłączamy wbudowane motywy DaisyUI (light/dark). Bez tego wbudowany `dark`
+ * ma `prefersdark` i przy systemowym dark mode nadpisywał `xton`.
+ * Zostaje wyłącznie nasz `xton` — sklep zawsze w light mode (D-014).
+ */
 @plugin "daisyui" {
-    themes: light --default, dark --prefersdark;
+    themes: false;
+}
+
+/* Motyw jasny — jedyny i domyślny (D-014). */
+@plugin "daisyui/theme" {
+    name: "xton";
+    default: true;
+    color-scheme: light;
+
+    --color-base-100: #ffffff;
+    --color-base-200: #f4f4f5;
+    --color-base-300: #e4e4e7;
+    --color-base-content: #171717;
+
+    --color-primary: #ffd600;
+    --color-primary-content: #171717;
+    --color-secondary: #ffa600;
+    --color-secondary-content: #171717;
+    --color-accent: #ffa600;
+    --color-accent-content: #171717;
+    --color-neutral: #171717;
+    --color-neutral-content: #fafafa;
+
+    --color-info: #0ea5e9;
+    --color-info-content: #ffffff;
+    --color-success: #16a34a;
+    --color-success-content: #ffffff;
+    --color-warning: #ffa600;
+    --color-warning-content: #171717;
+    --color-error: #dc2626;
+    --color-error-content: #ffffff;
+
+    --radius-selector: 0.3125rem; /* 5px */
+    --radius-field: 0.3125rem;    /* 5px */
+    --radius-box: 0.5rem;         /* 8px */
+    --size-selector: 0.25rem;
+    --size-field: 0.25rem;
+    --border: 1px;
+    --depth: 0;
+    --noise: 0;
+}
+
+/* Tokeny jako utilities Tailwind: fonty, skala tekstu, kolory marki (bg-xton / text-xton). */
+@theme {
+    --font-sans: "Kanit", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-display: "Russo One", var(--font-sans);
+
+    --color-xton-yellow: #ffd600;
+    --color-xton-orange: #ffa600;
+    --color-xton-ink: #171717;
+    --color-xton-light: #fafafa;
+
+    --text-display: 3.8125rem;          /* 61px */
+    --text-display--line-height: 1.05;
+    --text-display--font-weight: 400;
+    --text-lead: 1.25rem;               /* 20px */
+    --text-lead--line-height: 1.5;
+}
+
+/* Nagłówki na foncie display (Russo One). Font istnieje WYŁĄCZNIE w wadze 400 —
+   wymuszamy 400 i wyłączamy syntetyczne pogrubienie (żadnego faux-bold). */
+@layer base {
+    h1,
+    h2,
+    h3,
+    .font-display {
+        font-family: var(--font-display);
+        font-weight: 400;
+        font-synthesis: none;
+    }
+}
+
+@layer components {
+    /* Główny przycisk CTA — gradient żółć→pomarańcz wg referencji XTON. */
+    .btn-xton {
+        color: var(--color-xton-ink);
+        background-image: linear-gradient(98.6deg, #ffd600 0%, #ffa600 100%);
+        border: none;
+    }
+
+    .btn-xton:hover {
+        background-image: linear-gradient(98.6deg, #ffcc00 0%, #ff9800 100%);
+    }
 }
 
 /*
@@ -20,19 +114,183 @@
  * pełną kontrolę nad semantyką i dostępnością (a11y).
  */
 
-/* Swiper — kropki paginacji na tle gradientu hero. */
-.hero-swiper {
-    --swiper-pagination-color: #fff;
-    --swiper-pagination-bullet-inactive-color: #fff;
-    --swiper-pagination-bullet-inactive-opacity: 0.45;
-    --swiper-pagination-bullet-size: 9px;
+/*
+ * ==========================================================================
+ *  KONTENER + HEADER (referencja Figma: sekcja nagłówka XTON)
+ *  Reguły poza @layer — wygrywają z utilities, dając stabilny, stanowy header.
+ * ==========================================================================
+ */
+
+/* Kontener: globalnie wycentrowany; padding 24px (mobile) / 32px (≥1024px).
+   max-width 1440px → ok. 1376px treści przy 32px paddingu (jak w Figmie). */
+.container {
+    width: 100%;
+    max-width: 1440px;
+    margin-inline: auto;
+    padding-inline: 24px;
 }
 
-/* Progresywne wzbogacanie: zanim JS zainicjuje Swiper, pokaż tylko 1 slajd
-   (bez pionowego ułożenia wszystkich slajdów). */
-.no-js .hero-swiper .swiper-wrapper {
-    display: block;
+@media (min-width: 1024px) {
+    .container {
+        padding-inline: 32px;
+    }
 }
-.no-js .hero-swiper .swiper-slide:not(:first-child) {
-    display: none;
+
+/* Header jest kotwicą dla rozwijanego menu mobilnego. */
+.site-header {
+    position: relative;
+}
+
+/* Logo (inline SVG) — normalizacja wysokości, proporcjonalna szerokość. */
+.site-branding svg {
+    display: block;
+    height: 1.75rem; /* 28px */
+    width: auto;
+}
+
+/* --- Nawigacja główna --- */
+.primary-menu {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.primary-menu li {
+    position: relative;
+}
+
+.primary-menu a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-size: 1rem; /* 16px */
+    line-height: 1;
+    text-transform: uppercase;
+    color: var(--color-base-content);
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 6px;
+    transition: text-decoration-color 0.15s ease;
+}
+
+/* Podkreślenie w kolorze marki (żółć) — dekoracja czytelna na jasnym tle. */
+.primary-menu a:hover,
+.primary-menu .current-menu-item > a,
+.primary-menu .current-menu-ancestor > a {
+    text-decoration-color: var(--color-primary);
+}
+
+/* Kareta przy pozycjach z podmenu (wg Figmy). */
+.primary-menu .menu-item-has-children > a::after {
+    content: "";
+    display: inline-block;
+    width: 0.4em;
+    height: 0.4em;
+    margin-top: -0.25em;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    transform: rotate(45deg);
+}
+
+/* --- Podmenu --- */
+.primary-menu .sub-menu {
+    margin: 0;
+    padding: 0.5rem 0;
+    list-style: none;
+}
+
+.primary-menu .sub-menu a {
+    text-transform: none;
+    padding: 0.375rem 1rem;
+    white-space: nowrap;
+}
+
+@media (min-width: 1024px) {
+    /* Flyout na desktopie. */
+    .primary-menu .sub-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        min-width: 12rem;
+        background: var(--color-base-100);
+        border: 1px solid var(--color-base-200);
+        border-radius: var(--radius-box);
+        box-shadow: 0 12px 32px -12px rgb(0 0 0 / 0.25);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(0.25rem);
+        transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s;
+        z-index: 50;
+    }
+
+    .primary-menu .menu-item-has-children:hover > .sub-menu,
+    .primary-menu .menu-item-has-children:focus-within > .sub-menu {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+}
+
+/* --- Toggle (hamburger) — widoczny tylko na mobile --- */
+.site-nav-toggle {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0.5rem;
+    color: var(--color-base-content);
+}
+
+.site-nav-toggle span {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: currentColor;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+/* --- Responsywność nawigacji --- */
+@media (max-width: 1023.98px) {
+    .primary-navigation {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 100%;
+        display: none;
+        padding: 1rem 24px 1.5rem;
+        background: var(--color-base-100);
+        border-top: 1px solid var(--color-base-200);
+        box-shadow: 0 12px 32px -12px rgb(0 0 0 / 0.25);
+        z-index: 40;
+    }
+
+    .primary-navigation.is-open {
+        display: block;
+    }
+
+    .primary-menu {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .primary-menu .sub-menu {
+        padding: 0.25rem 0 0.25rem 1rem;
+    }
+
+    .primary-menu .sub-menu a {
+        padding: 0.25rem 0;
+    }
+}
+
+@media (min-width: 1024px) {
+    .site-nav-toggle {
+        display: none;
+    }
 }

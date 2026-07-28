@@ -56,9 +56,14 @@ final class ViteAssets implements Bootable
     {
         $server = $this->devServerUrl();
 
+        // W trybie dev Vite serwuje moduły pod ścieżką `base` (vite.config.ts),
+        // która odpowiada części ścieżki distUri (np. /wp-content/themes/xton-shop/dist).
+        $base = (string) wp_parse_url($this->distUri, PHP_URL_PATH);
+        $origin = $server . $base;
+
         // Klient HMR + wejściowy moduł TS (Vite serwuje CSS przez import w app.ts).
-        wp_enqueue_script(self::HANDLE . '-client', $server . '/@vite/client', [], null, true);
-        wp_enqueue_script(self::HANDLE, $server . '/' . self::ENTRY, [], null, true);
+        wp_enqueue_script(self::HANDLE . '-client', $origin . '/@vite/client', [], null, true);
+        wp_enqueue_script(self::HANDLE, $origin . '/' . self::ENTRY, [], null, true);
     }
 
     private function enqueueProduction(): void

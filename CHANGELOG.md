@@ -6,6 +6,65 @@ Format: `## YYYY-MM-DD HH:MM` → opis + lista plików.
 
 ---
 
+## 2026-07-28 16:09
+Header sklepu wg referencji Figma (node 2401-10874) w wariancie JASNYM (D-016) + globalny `.container`.
+- `wp-content/themes/xton-shop/header.php` — przepisany: górny pasek (kontakt + język) + główny (logo → nawigacja → social); responsywny (hamburger); ikony/logo inline SVG (currentColor)
+- `wp-content/themes/xton-shop/assets/img/xton-logo.svg`, `assets/icons/{mail,phone,clock,globe,fb,ig,yt,tiktok,linkedin}.svg` — pobrane z Figmy, przekolorowane na `currentColor` (light mode)
+- `wp-content/themes/xton-shop/functions.php` — helpery `xton_asset()`, `xton_inline_svg()`, fallback `xton_primary_menu_fallback()`
+- `wp-content/themes/xton-shop/resources/css/app.css` — globalny `.container` (wycentrowany, max-width 1440px, px 24/32) + style nawigacji (carety, flyout, panel mobilny, toggle)
+- `wp-content/themes/xton-shop/resources/js/modules/header-nav.ts` — toggle menu mobilnego (a11y); import w `resources/js/app.ts`
+- `wp-content/themes/xton-shop/footer.php` — `.container` bez `mx-auto px-4` (obsługiwane globalnie)
+- weryfikacja: `php -l` OK, `npm run typecheck` OK, klasy Tailwind + reguły CSS skompilowane (curl serwera dev); wizualnie do potwierdzenia (tryb „coming soon")
+
+## 2026-07-28 15:48
+Fix light mode: strona nadal renderowała się ciemna mimo usunięcia `xton-dark`.
+- przyczyna: `@plugin "daisyui";` bez konfiguracji dołącza wbudowane motywy `light`+`dark`; wbudowany `dark` (`prefersdark`) nadpisywał `xton` przy systemowym `prefers-color-scheme: dark`
+- `wp-content/themes/xton-shop/resources/css/app.css` — dodane `@plugin "daisyui" { themes: false; }` (tylko `xton`)
+- weryfikacja (curl skompilowanego CSS z serwera dev): brak bloku `@media (prefers-color-scheme: dark)`, `:root` → `color-scheme: light; --color-base-100: #ffffff`
+- `wp-content/themes/xton-shop/CHANGELOG.md` — zaktualizowany wpis D-014
+
+## 2026-07-28 15:42
+Light-only + czysty slate strony głównej: usunięty dark mode i wszystkie sekcje design-first (nie-„xtonowe").
+- `wp-content/themes/xton-shop/resources/css/app.css` — usunięty motyw DaisyUI `xton-dark` (D-014) oraz CSS Swipera
+- `wp-content/themes/xton-shop/front-page.php` — zredukowany do czystego szkieletu (bez `Template Name`, bez sekcji)
+- `wp-content/themes/xton-shop/templates/parts/home/{carousel,categories,offers}.php` — usunięte (D-015)
+- `wp-content/themes/xton-shop/resources/js/modules/hero-carousel.ts` — usunięty; `resources/js/app.ts` — usunięty import i `initHeroCarousel()`
+- `wp-content/themes/xton-shop/app/Acf/Groups/HeroSlides.php` — usunięta; `app/Acf/Acf.php` — pusta lista `GROUPS`
+- `wp-content/themes/xton-shop/package.json` — usunięta zależność `swiper` (npm install zsynchronizowany)
+- weryfikacja: `npm run typecheck` zielony, brak osieroconych referencji (grep), `node_modules/swiper` usunięty
+- `wp-content/themes/xton-shop/CHANGELOG.md`, `DECISIONS.md` — zaktualizowane (D-014, D-015)
+
+## 2026-07-28 15:33
+Fix: brak stylów w trybie dev (`npm run dev`) — URL-e Vite nie uwzględniały ścieżki `base`.
+- `wp-content/themes/xton-shop/app/Assets/ViteAssets.php` — `enqueueDev()` dokleja prefiks `base` (z `distUri`) do `@vite/client` i modułu wejściowego; wcześniej 404 → CSS nie był wstrzykiwany
+- diagnoza: curl `http://localhost:5173/@vite/client` = 404, z prefiksem base = 200
+- `wp-content/themes/xton-shop/CHANGELOG.md` — wpis w [Unreleased] › Fixed
+
+## 2026-07-28 15:14
+Korekta fontów: Kanit 400 jako podstawowy + Russo One wyłącznie w 400 (bez faux-bold).
+- `resources/fonts/kanit-400-*.woff2` — dodane (latin + latin-ext)
+- `resources/css/fonts.css` — zregenerowany (10 faców: Kanit 300/400/500/600 + Russo One 400)
+- `resources/css/app.css` — na foncie display wymuszone `font-weight: 400` + `font-synthesis: none`
+- `DECISIONS.md` D-013 — uaktualniony opis fontów
+- weryfikacja: build OK (kanit-400 zhashowany)
+
+## 2026-07-28 15:02
+Design tokens XTON z Figmy (Figma MCP) → motyw sklepu (jasny) + self-host fontów. Build zielony.
+- `resources/fonts/*.woff2` — nowe: Russo One + Kanit (300/500/600), subsety latin+latin-ext
+- `resources/css/fonts.css` — nowy: lokalne `@font-face` (font-display: swap, unicode-range)
+- `resources/css/app.css` — motywy DaisyUI `xton` (jasny, domyślny) + `xton-dark`; tokeny `@theme` (fonty, kolory marki #FFD600/#FFA600/#171717/#FAFAFA, skala, radiusy 5px); `.btn-xton` (gradient CTA); fix: `*/` w komentarzu łamał build
+- `resources/js/app.ts` — import `fonts.css` (Vite hashuje woff2)
+- Efekt: komponenty DaisyUI przejmują branding (primary żółty, Russo One/Kanit, radius 5px)
+- `DECISIONS.md` D-013, `ARCHITECTURE.md` (sekcja 5.3 design tokens)
+- Źródło: Figma SeyTSejhtBQWSPRSGIZHR0, node 2232-3880
+- Decyzja właściciela: sklep jasny (UX/konwersja/zaufanie)
+
+## 2026-07-28 14:17
+Usunięcie strony opcji ACF (na razie) — carousel jeszcze niepodpięty (etap testów właściciela).
+- `app/Acf/Acf.php` — usunięto `registerOptionsPages()`, hook i stałą `OPTIONS_SLUG`; zostaje rejestracja grup pól
+- `ARCHITECTURE.md` — zaktualizowany opis (brak strony opcji)
+- weryfikacja: brak wiszących odwołań, `php -l` OK
+
 ## 2026-07-28 14:13
 Zmiana lokalizacji pól hero: z globalnej strony opcji na szablon strony.
 - `front-page.php` — dodano nagłówek `Template Name: Strona główna sklepu` (staje się Page Template)

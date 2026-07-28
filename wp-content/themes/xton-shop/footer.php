@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 ?>
 <footer class="site-footer border-t border-base-200 mt-12" role="contentinfo">
-    <div class="container mx-auto flex flex-col gap-4 px-4 py-8 md:flex-row md:items-center md:justify-between">
+    <div class="container flex flex-col gap-4 py-8 md:flex-row md:items-center md:justify-between">
         <p class="text-sm text-base-content/70">
             &copy; <?php echo esc_html(date_i18n('Y')); ?> <?php bloginfo('name'); ?>.
             <?php esc_html_e('Wszelkie prawa zastrzeżone.', 'xton-shop'); ?>
