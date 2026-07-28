@@ -44,9 +44,26 @@ wp search-replace OLD NEW     # e.g. migrating domains
 
 To enable debugging while developing, set `WP_DEBUG` (and `WP_DEBUG_LOG`) to `true` in `wp-config.php` — debug output then lands in `wp-content/debug.log`.
 
+### Motyw `xton-shop` — build (OOP + Vite + Tailwind v4 + TypeScript)
+
+Katalog: `wp-content/themes/xton-shop/`. Uwaga: w tym środowisku `NODE_ENV=production` powoduje pominięcie devDependencies — przy instalacji użyj `NODE_ENV=development`.
+
+```bash
+composer install                                  # zależności PHP + autoload PSR-4 (XtonShop\ -> app/)
+NODE_ENV=development npm install --include=dev     # zależności JS (vite, tailwind, daisyui, typescript)
+NODE_ENV=development npm run build                 # produkcyjny build -> dist/ (HASHOWANE + manifest)
+npm run dev                                        # serwer Vite + HMR (tworzy dist/hot; port 5173)
+npm run typecheck                                  # kontrola typów TS (tsc --noEmit)
+composer lint                                      # PHPCS (WPCS)
+```
+
+- **Hashowane buildy:** `dist/` jest w `.gitignore` — buduje się `npm run build`. `app/Assets/ViteAssets.php` czyta `dist/.vite/manifest.json` i kolejkuje pliki po hashu; w trybie dev (istnieje `dist/hot`) ładuje z serwera Vite.
+- **Wersjonowanie motywu (SemVer):** źródło prawdy to `Version:` w `style.css`; przy wydaniu zaktualizuj też `package.json`, `XTON_SHOP_VERSION` w `functions.php`, changelog motywu i utwórz tag `theme-vX.Y.Z`.
+
 ## Working conventions
 
 - **Never modify WordPress core** — `wp-admin/`, `wp-includes/`, and the root `wp-*.php` files are overwritten on every WordPress update. All custom work belongs in `wp-content/` (the `xton-shop` theme, and any future `plugins/` or `mu-plugins/`).
-- New theme code goes in `wp-content/themes/xton-shop/`. A WordPress theme minimally needs `style.css` (with the theme header comment) and either classic templates (`index.php`, `functions.php`, `header.php`, …) or, for a block theme, `theme.json` plus `templates/` and `patterns/`. Decide classic vs. block theme up front — it shapes the whole file layout.
+- New theme code goes in `wp-content/themes/xton-shop/` — a **classic, OOP theme** (decyzja D-006). Logika w klasach PSR-4 pod `app/` (namespace `XtonShop\`), rejestrowanych jako moduły `Bootable` w `app/Theme.php`; szablony klasyczne w korzeniu i `templates/`. Nowy moduł: utwórz klasę implementującą `Support\Contracts\Bootable` i dodaj ją do `Theme::MODULES`. Klasy Tailwind używane w PHP muszą być objęte `@source` w `resources/css/app.css`.
+- Nadpisywanie szablonów WooCommerce: kopiuj do `wp-content/themes/xton-shop/woocommerce/`, nigdy nie edytuj w katalogu wtyczki.
 - Don't edit files under `../../conf/` directly; change server/PHP settings through the Local app so they survive regeneration.
 - The root `wp-config.php` is environment-specific (local DB creds, salts) — keep it out of anything that would be shared or committed.

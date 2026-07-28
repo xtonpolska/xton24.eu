@@ -13,7 +13,19 @@ Zasady bumpowania:
 ---
 
 ## [Unreleased]
-- Prace nad pierwszą wersją motywu (do decyzji: typ motywu — klasyczny vs blokowy, O-001).
+- Kolejne szablony (single, page, archive, search) i bloki e-commerce z HyperUI.
+
+## [0.2.0] — 2026-07-28
+### Added
+- **Architektura OOP + PSR-4** (Composer, namespace `XtonShop\` → `app/`): `Theme` (bootstrap), interfejs `Bootable`, moduły `ThemeSupport`, `Menus`, `Cleanup`, `WooCommerce`, `ViteAssets`.
+- **Build Vite 6 + Tailwind v4 + TypeScript** z **hashowanymi** artefaktami i mapowaniem przez `dist/.vite/manifest.json`; tryb dev z HMR (plik `dist/hot`).
+- **DaisyUI** jako baza komponentów (plugin TW4, CSS-only); HyperUI jako źródło bloków e-commerce.
+- Klasyczne szablony: `functions.php`, `index.php`, `header.php`, `footer.php`, `templates/parts/content*.php`.
+- Integracja WooCommerce (wsparcie galerii, własne wrappery treści).
+- Optymalizacje: czyszczenie `<head>`, wyłączenie emoji; a11y: skip-link, `aria-label`, `sr-only`.
+- Konfiguracja: `composer.json`, `package.json`, `vite.config.ts`, `tsconfig.json`, `.gitignore`.
+### Changed
+- `Requires PHP` podniesione do **8.1** (nowoczesny kod, bez długu technologicznego).
 
 ## [0.1.0] — 2026-07-28
 ### Added

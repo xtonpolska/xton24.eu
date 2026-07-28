@@ -6,6 +6,23 @@ Format: `## YYYY-MM-DD HH:MM` → opis + lista plików.
 
 ---
 
+## 2026-07-28 13:23
+Zbudowanie fundamentu motywu `xton-shop` v0.2.0: OOP (PSR-4), Vite + Tailwind v4 + TS, DaisyUI, integracja WooCommerce. Zależności zainstalowane, build zweryfikowany.
+- `composer.json`, `package.json`, `vite.config.ts`, `tsconfig.json`, `.gitignore` (motyw) — nowe: konfiguracja narzędzi
+- `functions.php` — nowy: bootstrap (autoload + `Theme::boot()`)
+- `app/Theme.php`, `app/Support/Contracts/Bootable.php` — nowe: rdzeń OOP
+- `app/Setup/{ThemeSupport,Menus,Cleanup,WooCommerce}.php` — nowe: moduły
+- `app/Assets/ViteAssets.php` — nowy: ładowanie hashowanych assetów (manifest + HMR)
+- `index.php`, `header.php`, `footer.php`, `templates/parts/content.php`, `templates/parts/content-none.php` — nowe: szablony
+- `resources/css/app.css`, `resources/js/app.ts` — nowe: źródła front-endu (Tailwind v4 + DaisyUI, TS)
+- `style.css` — Version 0.1.0 → 0.2.0, Requires PHP 7.4 → 8.1
+- `wp-content/themes/xton-shop/CHANGELOG.md` — wydanie [0.2.0]
+- `DECISIONS.md` — D-006..D-009 (klasyczny motyw, OOP/PSR-4, Vite/TW4/TS, DaisyUI+HyperUI); O-001 rozstrzygnięte; dodano O-003, O-004
+- `ARCHITECTURE.md` — pełna architektura motywu (OOP, build, komponenty, WooCommerce, perf/SEO/a11y)
+- `CLAUDE.md` — komendy build/dev motywu
+- build: `dist/` (hashowane) wygenerowany lokalnie, ignorowany w git
+- tag git: `theme-v0.2.0`
+
 ## 2026-07-28 13:06
 Wprowadzenie wersjonowania motywu `xton-shop` (SemVer + tagi git), start v0.1.0.
 - `wp-content/themes/xton-shop/style.css` — nowy: nagłówek motywu WordPress, `Version: 0.1.0`

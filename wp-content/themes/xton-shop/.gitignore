@@ -1,0 +1,11 @@
+# Zależności
+/node_modules/
+/vendor/
+
+# Artefakty buildu (hashowane) — budowane przez `npm run build` na deployu
+/dist/
+hot
+
+# Lokalne
+*.log
+.DS_Store

@@ -20,7 +20,9 @@ Sklep e-commerce **xton24.eu** na stacku WordPress + WooCommerce, rozwijany loka
 | Baza danych        | MySQL (via Local), baza `local`, prefix `wp_` |
 | Serwer WWW         | nginx / Apache (zarządzane przez Local)       |
 | Środowisko dev     | Local by Flywheel (Windows)                   |
-| Motyw własny       | `xton-shop` (do zbudowania)                   |
+| Motyw własny       | `xton-shop` (klasyczny, OOP)                  |
+| Build front-end    | Vite 6, Tailwind CSS v4, TypeScript, DaisyUI  |
+| Menedżery pakietów | Composer (PHP, PSR-4), npm (JS)               |
 
 ## 3. Struktura repozytorium
 
@@ -55,9 +57,52 @@ Zdalne repozytorium: **https://github.com/xtonpolska/xton24.eu** (gałąź `main
 
 ## 5. Motyw `xton-shop`
 
-Stan: **v0.1.0** — `style.css` z nagłówkiem WordPress (motyw jeszcze niefunkcjonalny do czasu decyzji O-001). Decyzja *klasyczny vs blokowy* → zob. [DECISIONS.md](DECISIONS.md).
+Stan: **v0.2.0** — klasyczny motyw OOP z buildem Vite. Typ: **klasyczny, custom** (D-006).
 
-Wymagania integracji z WooCommerce zostaną tu opisane w miarę rozwoju (m.in. `add_theme_support('woocommerce')`, szablony `woocommerce/` w motywie, hooki WooCommerce).
+### 5.1 Architektura PHP (OOP + PSR-4)
+
+- Autoloading PSR-4 (Composer): namespace `XtonShop\` → katalog `app/`.
+- `functions.php` ładuje `vendor/autoload.php` i woła `XtonShop\Theme::boot()`.
+- `Theme` (singleton) rejestruje moduły z listy `MODULES`; każdy moduł implementuje interfejs `Support\Contracts\Bootable` i podpina swoje hooki w `boot()`.
+
+```
+app/
+├── Theme.php                      // bootstrap, rejestr modułów
+├── Support/Contracts/Bootable.php // interfejs modułu
+├── Assets/ViteAssets.php          // ładowanie hashowanych assetów (manifest + HMR)
+└── Setup/
+    ├── ThemeSupport.php           // add_theme_support (WP + WooCommerce)
+    ├── Menus.php                  // register_nav_menus (primary, footer)
+    ├── Cleanup.php                // czyszczenie <head>, wyłączenie emoji (perf)
+    └── WooCommerce.php            // własne wrappery treści sklepu
+```
+
+Szablony klasyczne: `index.php`, `header.php`, `footer.php`, części w `templates/parts/`.
+
+### 5.2 Build front-end (Vite + Tailwind v4 + TypeScript)
+
+- Źródła w `resources/` (`css/app.css`, `js/app.ts`). Wyjście: `dist/` (hashowane, **gitignore**).
+- **Tailwind v4** przez `@tailwindcss/vite`; **DaisyUI** jako plugin (`@plugin "daisyui"` w `app.css`); skanowanie klas w PHP przez `@source`.
+- **Hashowane buildy:** `ViteAssets` czyta `dist/.vite/manifest.json` i kolejkuje pliki po hashu (bez `?ver`). Klucz wejścia: `resources/js/app.ts` → `file` + `css[]`.
+- **Tryb dev (HMR):** `npm run dev` uruchamia serwer Vite (port 5173) i zapisuje `dist/hot`; `ViteAssets` wykrywa ten plik i ładuje moduły z serwera dev zamiast z manifestu. Inline plugin w `vite.config.ts` tworzy/usuwa `dist/hot`.
+- Skrypty ładowane jako `type="module"` (filtr `script_loader_tag`).
+
+### 5.3 Komponenty UI (D-009)
+
+- **DaisyUI** (CSS-only, bez JS) — baza komponentów i motywowanie (`data-theme`).
+- **HyperUI** (MIT, copy-paste) — źródło darmowych bloków e-commerce; markup wklejany do `templates/` i stylowany klasami Tailwind/DaisyUI, z dbałością o a11y.
+
+### 5.4 Integracja WooCommerce
+
+- `add_theme_support('woocommerce')` + galeria (zoom/lightbox/slider) w `ThemeSupport`.
+- `Setup\WooCommerce` podmienia domyślne wrappery (`woocommerce_before/after_main_content`) na markup layoutu motywu; aktywne tylko gdy WooCommerce działa.
+- Nadpisywanie szablonów WooCommerce: kopie do `xton-shop/woocommerce/` (nigdy edycja w katalogu wtyczki).
+
+### 5.5 Wydajność / SEO / dostępność
+
+- Perf: `Cleanup` usuwa zbędne meta i emoji; moduły JS są deferowane; assety hashowane (długi cache).
+- SEO: `title-tag`, semantyczny HTML, poprawna hierarchia nagłówków. Warstwa schema/OG → O-004.
+- A11y: skip-link, `aria-label` nawigacji, `sr-only`/`not-sr-only`, `lazy` na miniaturach.
 
 ### Wersjonowanie motywu (D-005)
 
@@ -76,4 +121,4 @@ Wymagania integracji z WooCommerce zostaną tu opisane w miarę rozwoju (m.in. `
 
 ---
 
-*Aktualizowane automatycznie. Ostatnia aktualizacja: 2026-07-28 13:06.*
+*Aktualizowane automatycznie. Ostatnia aktualizacja: 2026-07-28 13:23.*

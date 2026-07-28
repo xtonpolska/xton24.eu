@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+/* DaisyUI jako baza komponentów (plugin, CSS-only, bez JS). */
+@plugin "daisyui" {
+    themes: light --default, dark --prefersdark;
+}
+
+/*
+ * Skanowanie klas w szablonach PHP motywu (Tailwind v4 @source).
+ * Ścieżki względem tego pliku (resources/css/ → root motywu = ../../).
+ */
+@source "../../*.php";
+@source "../../templates/**/*.php";
+@source "../../app/**/*.php";
+
+/*
+ * Bloki e-commerce pochodzą z HyperUI (https://www.hyperui.dev/ — MIT):
+ * karty produktu, siatki, koszyk, checkout, filtry. Markup wklejamy do
+ * szablonów w templates/ i stylujemy klasami Tailwind/DaisyUI, zachowując
+ * pełną kontrolę nad semantyką i dostępnością (a11y).
+ */

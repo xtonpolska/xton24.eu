@@ -1,0 +1,20 @@
+{
+    "name": "xton-shop",
+    "version": "0.2.0",
+    "private": true,
+    "type": "module",
+    "description": "Front-end build motywu xton-shop (Vite + Tailwind v4 + TypeScript).",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "preview": "vite preview",
+        "typecheck": "tsc --noEmit"
+    },
+    "devDependencies": {
+        "@tailwindcss/vite": "^4.1.0",
+        "daisyui": "^5.0.0",
+        "tailwindcss": "^4.1.0",
+        "typescript": "^5.7.0",
+        "vite": "^6.0.0"
+    }
+}

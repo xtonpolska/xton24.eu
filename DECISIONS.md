@@ -35,13 +35,37 @@ Format wpisu: data, decyzja, kontekst/uzasadnienie, status.
 - **Uzasadnienie:** Możliwość śledzenia i aktualizowania motywu wg jasnego ciągu wersji; `0.x` = faza przed stabilnym `1.0.0`.
 - **Status:** ✅ Przyjęta
 
+### D-006 — Typ motywu: klasyczny, custom (rozstrzyga O-001)
+- **Data:** 2026-07-28
+- **Decyzja:** Motyw **klasyczny** (PHP: `functions.php`, `header.php`, `index.php`, szablony w `templates/`), w pełni customowy — bez motywu blokowego i bez frameworka typu Sage/Timber.
+- **Status:** ✅ Przyjęta
+
+### D-007 — Architektura PHP: OOP + PSR-4 (Composer)
+- **Data:** 2026-07-28
+- **Decyzja:** Logika motywu w OOP. Autoloading PSR-4 przez Composer, namespace `XtonShop\` → katalog `app/`. Moduły implementują interfejs `Bootable` i są bootowane przez `XtonShop\Theme::boot()` z `functions.php`.
+- **Uzasadnienie:** Testowalność, czysty podział odpowiedzialności, brak długu technologicznego.
+- **Status:** ✅ Przyjęta
+
+### D-008 — Build front-end: Vite + Tailwind v4 + TypeScript, hashowane buildy
+- **Data:** 2026-07-28
+- **Decyzja:** Bundler **Vite 6**, **Tailwind CSS v4** (`@tailwindcss/vite`), **TypeScript** od startu. Buildy **hashowane**, mapowane w PHP przez `dist/.vite/manifest.json` (klasa `Assets\ViteAssets`). Tryb dev z HMR via plik `dist/hot`. Menedżery: **Composer** (PHP) + **npm** (JS).
+- **Uzasadnienie:** Nowoczesny, wydajny build; cache-busting przez hash; TS eliminuje dług technologiczny „na dzień dobry".
+- **Status:** ✅ Przyjęta
+
+### D-009 — Biblioteka komponentów: DaisyUI + HyperUI
+- **Data:** 2026-07-28
+- **Decyzja:** **DaisyUI** (plugin Tailwind, CSS-only, semantyczne klasy, motywowanie pod markę) jako baza komponentów + **HyperUI** (MIT, copy-paste) jako źródło darmowych bloków e-commerce (karty produktu, siatki, koszyk, checkout). Bez cudzego JS runtime — pełna kontrola nad a11y i wydajnością.
+- **Uzasadnienie:** Środek między lekkością Daisy a bogactwem gotowych bloków; dużo darmowych komponentów e-commerce bez narzutu JS.
+- **Status:** ✅ Przyjęta
+
 ---
 
 ## Decyzje otwarte / do podjęcia
 
-- **O-001 — Typ motywu `xton-shop`:** klasyczny (PHP: `functions.php`, `header.php`, …) czy blokowy (`theme.json`, `templates/`, `patterns/`)? *Wybór ukształtuje całą strukturę motywu.* — **oczekuje na decyzję**
 - **O-002 — WooCommerce w repo:** obecnie ignorowany (D-003). Do rozważenia zamrożenie konkretnej wersji w repo, jeśli zajdzie potrzeba. — **oczekuje na decyzję**
+- **O-003 — Pipeline deployu/buildu:** `dist/` jest ignorowany w git (buildowany przez `npm run build`). Do ustalenia sposób deployu na produkcję (build na serwerze / w CI / commit artefaktów). — **oczekuje na decyzję**
+- **O-004 — SEO:** wtyczka (Yoast / RankMath) czy własna warstwa meta/schema w motywie? Motyw dba o semantykę i `title-tag`, ale schema/OG do ustalenia. — **oczekuje na decyzję**
 
 ---
 
-*Aktualizowane automatycznie. Ostatnia aktualizacja: 2026-07-28 13:06.*
+*Aktualizowane automatycznie. Ostatnia aktualizacja: 2026-07-28 13:23.*
