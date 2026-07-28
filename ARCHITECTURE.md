@@ -88,11 +88,17 @@ Obecnie brak zdefiniowanych grup pól (`Acf::GROUPS` jest pusta) — grupa `Hero
 
 Szablony klasyczne: `index.php`, `front-page.php`, `header.php`, `footer.php`, części w `templates/parts/`.
 
-Strona główna (`front-page.php`) to obecnie **czysty szkielet** (`<main>` bez treści) — pierwotne sekcje design-first (hero carousel, kategorie, oferty) usunięto jako nie-„xtonowe" (D-015). Do odbudowy od nowa wg referencji Figma XTON.
+Strona główna (`front-page.php`) składa sekcje z `templates/parts/home/`:
+- **hero carousel** (`hero-carousel.php`) — ciemny panel zamknięty w `.container` (radius 5px, element designu na jasnej stronie), treść+CTA po lewej, grafika po prawej z gradientowym „dissolve"; kontrolki poza panelem. Interakcje w `resources/js/modules/hero-carousel.ts` (natywny scroll-snap + strzałki/kropki, autoplay ~6 s, wolne przejście, `prefers-reduced-motion`, degradacja bez JS).
+- **kategorie** (`categories.php`) — masonry/kolaż wg Figma (node 2210-3444): kafle to ciemne zdjęcia z gradientem (samo-kontrastujące na jasnej sekcji), tytuł Russo One + opis + CTA; siatka 1/2/3 kolumny ze spanami (`.cat-tile--wide`/`--tall`) na ≥1024px. Nagłówek przez reużywalny `.section-head`.
+
+Dane sekcji to placeholdery (grafiki z placehold.co, linki `#`); nazwy kategorii pochodzą z istniejącego sklepu xton24.pl. Docelowo — źródła z WooCommerce (taksonomie, obrazy).
+
+> **Konwencja:** nie nazywaj własnych klas jak komponenty DaisyUI (`.hero`, `.card`, `.btn`, `.footer`…) — kolidują z ich stylami (np. `.hero` = `display:grid; place-items:center`). Dla wrapperów używaj własnych nazw (`.hero-wrap`, `.home-hero`).
 
 **Helpery szablonów (`functions.php`):** `xton_asset($rel)` — URL statycznego assetu z `assets/` + cache-busting po `XTON_SHOP_VERSION`; `xton_inline_svg($rel)` — inline'uje SVG z `assets/` (zaufane pliki motywu) tak, że ikony używają `currentColor`; `xton_primary_menu_fallback()` — fallback menu `primary`, gdy nie przypisano menu w panelu.
 
-**Assety statyczne** (`assets/`, poza pipeline'em Vite): `img/` (logo) i `icons/` (SVG). Pobrane z Figmy i przekolorowane na `currentColor`, żeby kolorem sterował CSS (light mode, D-014/D-016).
+**Assety statyczne** (`assets/`, poza pipeline'em Vite): `img/` (logo), `icons/` (ikony SVG UI), `certs/` (znaki certyfikacyjne SVG), `flags/` (flagi PNG), `logos/` (logotypy partnerów PNG/SVG). Grafiki monochromatyczne z Figmy przekolorowane na `currentColor`, by kolorem sterował CSS (light mode, D-014/D-016); kolorowe logotypy/flagi zostają as-is.
 
 ### 5.1.1 Header (D-016, light mode)
 
@@ -101,6 +107,10 @@ Strona główna (`front-page.php`) to obecnie **czysty szkielet** (`<main>` bez 
 - **Główny pasek**: logo (`xton_inline_svg`) → nawigacja `primary` (`wp_nav_menu` + fallback) → ikony social.
 - **Responsywność:** `<1024px` nawigacja chowa się pod hamburgerem (`.site-nav-toggle`) i rozwija jako panel (`.primary-navigation.is-open`); sterowanie: `resources/js/modules/header-nav.ts` (a11y: `aria-expanded`, Escape, klik poza, reset przy powrocie na desktop). Podmenu: flyout na desktopie (`:hover`/`:focus-within`), inline na mobile.
 - Style nawigacji i **globalny `.container`** (wycentrowany, `max-width 1440px`, padding `24px`/`32px`) w `resources/css/app.css` (reguły poza `@layer`, by wygrywały z utilities).
+
+### 5.1.2 Stopka (D-016, light mode)
+
+`footer.php` odwzorowuje stopkę z Figmy (node `2218-4147`) w wariancie jasnym: logo → responsywna siatka 4 kolumn (informacje firmowe, kontakt z flagami języka, „na skróty", „o nas") → sekcja social („Zaobserwuj nas") + blok certyfikatów (`certs/*` inline SVG na `currentColor`, flagi `flags/*`) i logotypów partnerów (`logos/*`) → pasek dolny (polityka prywatności + copyright). Dane (adres, telefony, VAT/KRS/NIP, linki) to placeholdery — docelowo z opcji/menu WP. Klasy pomocnicze `.footer-link` (linki-akcenty), `.footer-nav a` (wyszarzone kolumny) w `app.css`.
 
 ### 5.2 Build front-end (Vite + Tailwind v4 + TypeScript)
 
@@ -153,4 +163,4 @@ Identyfikacja wizualna XTON (z Figmy) jako tokeny w `resources/css/app.css`:
 
 ---
 
-*Aktualizowane automatycznie. Ostatnia aktualizacja: 2026-07-28 16:09.*
+*Aktualizowane automatycznie. Ostatnia aktualizacja: 2026-07-28 16:49.*

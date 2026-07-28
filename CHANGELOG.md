@@ -6,6 +6,34 @@ Format: `## YYYY-MM-DD HH:MM` → opis + lista plików.
 
 ---
 
+## 2026-07-28 16:49
+Sekcja „Kategorie" na stronie głównej — masonry/kolaż wg Figma (node 2210-3444), light mode.
+- `wp-content/themes/xton-shop/templates/parts/home/categories.php` — nowy: nagłówek sekcji + siatka masonry (kafel szeroki + wysoki + zwykłe), kafle = ciemne zdjęcia z gradientem, tytuł Russo One, opis, CTA; hover (scale obrazu, przesunięcie strzałki)
+- `wp-content/themes/xton-shop/front-page.php` — dołączona sekcja kategorii (po hero)
+- `wp-content/themes/xton-shop/resources/css/app.css` — reużywalny `.section-head` + `.cat-collage` (1/2/3 kolumny, spany na ≥1024px) + kafle
+- dane: kategorie pobrane z **xton24.pl** (Piaskarki, Systemy DPF, Myjki, Master Box, Chemia XPOWER, Materiały eksploatacyjne); grafiki placehold.co, linki `#` (do podmiany na taksonomie WooCommerce)
+- weryfikacja: `php -l` OK, build OK, zrzuty desktop + mobile (izolowany podgląd)
+- korekta wysokości kafli (`grid-auto-rows`): finalnie 22.5rem mobile / 26.25rem desktop
+
+## 2026-07-28 16:41
+Hero carousel na stronie głównej — ciemny panel w kontenerze, dissolve grafiki gradientem (frontend-design).
+- `wp-content/themes/xton-shop/templates/parts/home/hero-carousel.php` — nowy: panel ciemny (radius 5px) w `.container`, treść+CTA po lewej, grafika (placehold.co) po prawej z gradientowym „dissolve"; kontrolki (kropki+strzałki) POZA panelem; dane placeholder
+- `wp-content/themes/xton-shop/front-page.php` — dołączony hero carousel
+- `wp-content/themes/xton-shop/resources/js/modules/hero-carousel.ts` — nowy: scroll-snap + strzałki/kropki, autoplay ~6 s z pauzą, własne wolne przejście (easing ~700 ms), `prefers-reduced-motion`, degradacja bez JS (swipe); `resources/js/app.ts` — import + init
+- `wp-content/themes/xton-shop/resources/css/app.css` — style hero (dissolve, kontrolki, kropki gradientowe)
+- fix: zmiana klasy wrappera `.hero` → `.hero-wrap` (kolizja z komponentem DaisyUI `.hero` łamała layout kontrolek — wykryte na podglądzie)
+- weryfikacja wizualna: izolowany podgląd + zrzuty (desktop + mobile), `npm run typecheck` OK, `php -l` OK
+
+## 2026-07-28 16:21
+Stopka sklepu wg referencji Figma (node 2218-4147) w wariancie JASNYM (D-016).
+- `wp-content/themes/xton-shop/footer.php` — przepisana: logo + 4 kolumny (informacje firmowe, kontakt z flagami, na skróty, o nas) + social + certyfikaty/partnerzy + pasek dolny (polityka prywatności / copyright); dane placeholder
+- `wp-content/themes/xton-shop/assets/flags/{pl,eu,uk}.png` — flagi (PNG, kolorowe)
+- `wp-content/themes/xton-shop/assets/certs/{ce,gs1,upr}.svg` — znaki certyfikacyjne, przekolorowane na `currentColor`
+- `wp-content/themes/xton-shop/assets/logos/{rzetelna-firma.png,malopolska.png,nowy-sacz.svg}` — logotypy partnerów (kolorowe, as-is)
+- logo i ikony social zreużyte z headera (`assets/img/xton-logo.svg`, `assets/icons/*.svg`)
+- `wp-content/themes/xton-shop/resources/css/app.css` — style stopki (rozmiary logo/social/badge, `.footer-link`, `.footer-nav`)
+- weryfikacja: `php -l` OK, klasy Tailwind + reguły CSS skompilowane (curl serwera dev), brak kolizji `id` clipPath; wizualnie do potwierdzenia (tryb „coming soon")
+
 ## 2026-07-28 16:09
 Header sklepu wg referencji Figma (node 2401-10874) w wariancie JASNYM (D-016) + globalny `.container`.
 - `wp-content/themes/xton-shop/header.php` — przepisany: górny pasek (kontakt + język) + główny (logo → nawigacja → social); responsywny (hamburger); ikony/logo inline SVG (currentColor)
