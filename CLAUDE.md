@@ -2,6 +2,20 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Dokumentacja projektu — prowadź ją automatycznie (WAŻNE)
+
+Projekt utrzymuje trzy pliki dokumentacji w web roocie. **Aktualizuj je automatycznie, bez proszenia**, w ramach wykonywanej pracy — to stała zasada tego projektu (decyzja D-004):
+
+- **`ARCHITECTURE.md`** — cała wiedza techniczna i architektoniczna (stack, struktura, integracje, konwencje). Aktualizuj przy **każdej zmianie technicznej** wpływającej na architekturę.
+- **`DECISIONS.md`** — dziennik decyzji **biznesowych i projektowych** właściciela. Gdy użytkownik podejmie decyzję (np. wybór technologii, funkcji, kierunku), **dopisz nowy wpis `D-NNN`** z datą, treścią i uzasadnieniem. Zanim zaproponujesz rozwiązanie, sprawdź ten plik, by działać zgodnie z wcześniejszymi ustaleniami.
+- **`CHANGELOG.md`** — dziennik zmian technicznych. Po **każdej** modyfikacji kodu/plików dopisz na górze wpis z **datą, godziną i listą ruszanych plików**.
+
+Zasady prowadzenia:
+- Pobieraj realną datę/godzinę komendą (`date "+%Y-%m-%d %H:%M"`) — nie zgaduj czasu.
+- Najnowsze wpisy w CHANGELOG na górze. Aktualizuj stopkę „Ostatnia aktualizacja" w ARCHITECTURE/DECISIONS.
+- Dołączaj te pliki do commitów razem ze zmianami, których dotyczą.
+- Język dokumentacji: polski (zgodnie z komunikacją z właścicielem).
+
 ## What this is
 
 A **WordPress 7.0.2** site served from a **Local (by Flywheel)** development environment. The working directory (`app/public`) is the WordPress web root. The site's only custom development target is the theme **`wp-content/themes/xton-shop`**, which is currently **empty** — it is intended to be built out from scratch. Everything else in this directory is WordPress core (`wp-admin/`, `wp-includes/`, root `wp-*.php`) or bundled default themes (`twentytwentytwo`…`twentytwentyfive`).
