@@ -6,6 +6,15 @@ Format: `## YYYY-MM-DD HH:MM` → opis + lista plików.
 
 ---
 
+## 2026-07-28 13:06
+Wprowadzenie wersjonowania motywu `xton-shop` (SemVer + tagi git), start v0.1.0.
+- `wp-content/themes/xton-shop/style.css` — nowy: nagłówek motywu WordPress, `Version: 0.1.0`
+- `wp-content/themes/xton-shop/CHANGELOG.md` — nowy: dziennik wydań motywu (SemVer)
+- `wp-content/themes/xton-shop/.gitkeep` — usunięty (motyw ma już realne pliki)
+- `DECISIONS.md` — dodano D-005 (schemat wersjonowania motywu)
+- `ARCHITECTURE.md` — dodano sekcję „Wersjonowanie motywu"
+- tag git: `theme-v0.1.0`
+
 ## 2026-07-28 13:02
 Utworzenie systemu dokumentacji projektu (ARCHITECTURE / DECISIONS / CHANGELOG) i zapis zasady ich automatycznego prowadzenia w CLAUDE.md.
 - `ARCHITECTURE.md` — nowy: dokumentacja techniczna i architektoniczna (stack, struktura repo, środowisko Local, motyw)

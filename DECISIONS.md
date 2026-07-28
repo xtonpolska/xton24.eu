@@ -29,6 +29,12 @@ Format wpisu: data, decyzja, kontekst/uzasadnienie, status.
 - **Decyzja:** Projekt prowadzi trzy pliki dokumentacji, uzupełniane automatycznie przez Claude'a: `ARCHITECTURE.md` (technika), `DECISIONS.md` (decyzje biznesowe/projektowe), `CHANGELOG.md` (dziennik zmian z datą, godziną i listą plików).
 - **Status:** ✅ Przyjęta
 
+### D-005 — Wersjonowanie motywu `xton-shop` (SemVer + tagi git)
+- **Data:** 2026-07-28
+- **Decyzja:** Motyw wersjonowany wg SemVer (`MAJOR.MINOR.PATCH`), start od `0.1.0`. Źródło prawdy: pole `Version:` w `style.css`. Każde wydanie oznaczane tagiem git `theme-vX.Y.Z`. Ciąg wydań prowadzony w `wp-content/themes/xton-shop/CHANGELOG.md`.
+- **Uzasadnienie:** Możliwość śledzenia i aktualizowania motywu wg jasnego ciągu wersji; `0.x` = faza przed stabilnym `1.0.0`.
+- **Status:** ✅ Przyjęta
+
 ---
 
 ## Decyzje otwarte / do podjęcia
@@ -38,4 +44,4 @@ Format wpisu: data, decyzja, kontekst/uzasadnienie, status.
 
 ---
 
-*Aktualizowane automatycznie. Ostatnia aktualizacja: 2026-07-28 13:02.*
+*Aktualizowane automatycznie. Ostatnia aktualizacja: 2026-07-28 13:06.*

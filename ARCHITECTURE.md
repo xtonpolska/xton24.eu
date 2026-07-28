@@ -55,9 +55,18 @@ Zdalne repozytorium: **https://github.com/xtonpolska/xton24.eu** (gałąź `main
 
 ## 5. Motyw `xton-shop`
 
-Stan: **szkielet** (`.gitkeep`), do zbudowania. Decyzja *klasyczny vs blokowy* → zob. [DECISIONS.md](DECISIONS.md).
+Stan: **v0.1.0** — `style.css` z nagłówkiem WordPress (motyw jeszcze niefunkcjonalny do czasu decyzji O-001). Decyzja *klasyczny vs blokowy* → zob. [DECISIONS.md](DECISIONS.md).
 
 Wymagania integracji z WooCommerce zostaną tu opisane w miarę rozwoju (m.in. `add_theme_support('woocommerce')`, szablony `woocommerce/` w motywie, hooki WooCommerce).
+
+### Wersjonowanie motywu (D-005)
+
+- Schemat: **SemVer** `MAJOR.MINOR.PATCH`, start `0.1.0` (`0.x` = przed stabilnym `1.0.0`).
+- **Źródło prawdy:** pole `Version:` w `wp-content/themes/xton-shop/style.css`.
+- Każde wydanie = **tag git** `theme-vX.Y.Z` (np. `theme-v0.1.0`).
+- Ciąg wydań opisany w `wp-content/themes/xton-shop/CHANGELOG.md` (sekcja `[Unreleased]` → wydanie).
+- Bump: MAJOR = zmiany łamiące, MINOR = nowa funkcja wstecznie zgodna, PATCH = poprawki.
+- Przy każdym wydaniu: zaktualizuj `Version:` w `style.css`, przenieś wpisy z `[Unreleased]` do nowej sekcji w changelogu motywu, utwórz tag git.
 
 ## 6. Konwencje techniczne
 
@@ -67,4 +76,4 @@ Wymagania integracji z WooCommerce zostaną tu opisane w miarę rozwoju (m.in. `
 
 ---
 
-*Aktualizowane automatycznie. Ostatnia aktualizacja: 2026-07-28 13:02.*
+*Aktualizowane automatycznie. Ostatnia aktualizacja: 2026-07-28 13:06.*
