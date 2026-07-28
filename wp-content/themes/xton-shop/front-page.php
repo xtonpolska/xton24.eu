@@ -1,7 +1,11 @@
 <?php
 
 /**
- * Strona główna sklepu.
+ * Template Name: Strona główna sklepu
+ *
+ * Strona główna sklepu — używana automatycznie dla front page,
+ * a także dostępna jako szablon strony (Page Attributes → Szablon),
+ * do którego przypięte są pola ACF „Hero — slajdy".
  *
  * Sekcje: hero carousel → kategorie → oferty specjalne.
  * Etap: design-first (dane placeholder). Podpięcie pod WooCommerce później —

@@ -79,12 +79,14 @@ app/
     ├── Acf.php                    // Bootable: options page + rejestr grup (acf/init)
     ├── FieldGroup.php             // kontrakt: definition(): array
     └── Groups/
-        └── HeroSlides.php         // repeater slajdów hero (strona opcji)
+        └── HeroSlides.php         // repeater slajdów hero (szablon front-page.php)
 ```
 
-**ACF Pro — pola deklaratywnie w kodzie (D-011, D-012).** ACF Pro instalowany przez root `composer.json`. Grupy pól rejestrujemy w kodzie (`acf_add_local_field_group()` na `acf/init`) — nigdy w panelu. Nowa grupa = klasa w `app/Acf/Groups/` implementująca `FieldGroup`, dodana do `Acf::GROUPS`. Globalne ustawienia trzyma strona opcji „Ustawienia motywu" (`Acf::OPTIONS_SLUG`). Moduł jest no-op, gdy ACF nieaktywny.
+**ACF Pro — pola deklaratywnie w kodzie (D-011, D-012).** ACF Pro instalowany przez root `composer.json`. Grupy pól rejestrujemy w kodzie (`acf_add_local_field_group()` na `acf/init`) — nigdy w panelu. Nowa grupa = klasa w `app/Acf/Groups/` implementująca `FieldGroup`, dodana do `Acf::GROUPS`. Moduł jest no-op, gdy ACF nieaktywny.
 
-Szablony klasyczne: `index.php`, `front-page.php`, `header.php`, `footer.php`, części w `templates/parts/`.
+Lokalizacje pól: grupa `HeroSlides` jest przypięta do **szablonu strony** `front-page.php` (`page_template == front-page.php`) — pola pojawiają się przy edycji strony z tym szablonem. Strona opcji „Ustawienia motywu" (`Acf::OPTIONS_SLUG`) pozostaje jako kontener na przyszłe ustawienia globalne (obecnie bez grup).
+
+Szablony klasyczne: `index.php`, `front-page.php` (także Page Template „Strona główna sklepu"), `header.php`, `footer.php`, części w `templates/parts/`.
 
 Strona główna (`front-page.php`) składa sekcje z `templates/parts/home/` (`carousel.php`, `categories.php`, `offers.php`). Etap **design-first**: każda sekcja renderuje markup, iterując po tablicy PHP (`$slides`/`$categories`/`$offers`) z danymi placeholder — podpięcie pod WooCommerce (np. `get_terms('product_cat')`, `wc_get_product_ids_on_sale()`) polega na podmianie źródła tablicy, bez zmian markупu. Interaktywny hero to Swiper 11 inicjowany w `resources/js/modules/hero-carousel.ts` (A11y, `prefers-reduced-motion`, progresywne wzbogacanie).
 
@@ -130,4 +132,4 @@ Strona główna (`front-page.php`) składa sekcje z `templates/parts/home/` (`ca
 
 ---
 
-*Aktualizowane automatycznie. Ostatnia aktualizacja: 2026-07-28 14:07.*
+*Aktualizowane automatycznie. Ostatnia aktualizacja: 2026-07-28 14:13.*

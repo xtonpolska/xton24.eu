@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace XtonShop\Acf\Groups;
 
-use XtonShop\Acf\Acf;
 use XtonShop\Acf\FieldGroup;
 
 /**
@@ -92,9 +91,9 @@ final class HeroSlides implements FieldGroup
             'location'   => [
                 [
                     [
-                        'param'    => 'options_page',
+                        'param'    => 'page_template',
                         'operator' => '==',
-                        'value'    => Acf::OPTIONS_SLUG,
+                        'value'    => 'front-page.php',
                     ],
                 ],
             ],

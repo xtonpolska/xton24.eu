@@ -19,7 +19,8 @@ Zasady bumpowania:
   - **Kategorie** — responsywna siatka kafli (2/3/6 kolumn).
   - **Oferty specjalne** — karty produktów z badge przeceny, oceną, ceną promocyjną, CTA.
 - Zależności front-end: `swiper`, `@types/node`.
-- **Integracja ACF Pro w kodzie** (deklaratywnie, D-012): moduł `Acf\Acf` (strona opcji „Ustawienia motywu"), kontrakt `Acf\FieldGroup`, grupa `Groups\HeroSlides` (repeater slajdów hero) — gotowe do podpięcia carousela.
+- **Integracja ACF Pro w kodzie** (deklaratywnie, D-012): moduł `Acf\Acf`, kontrakt `Acf\FieldGroup`, grupa `Groups\HeroSlides` (repeater slajdów hero) przypięta do szablonu `front-page.php` — gotowe do podpięcia carousela.
+- `front-page.php` otrzymał nagłówek `Template Name: Strona główna sklepu` (dostępny jako Page Template).
 - Sekcje iterują po tablicach PHP (`$slides`/`$categories`/`$offers`) — gotowe do podpięcia pod WooCommerce bez zmian markупu.
 - Migracja klas do kanonicznego Tailwind v4 (`bg-linear-*`, skala odstępów, sufiks `!`).
 - Kolejne szablony (single, page, archive, search) i bloki e-commerce z HyperUI. *(planowane)*

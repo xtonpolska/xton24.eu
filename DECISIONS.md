@@ -74,7 +74,7 @@ Format wpisu: data, decyzja, kontekst/uzasadnienie, status.
 ### D-012 — Pola ACF deklaratywnie w kodzie (nie w panelu)
 - **Data:** 2026-07-28
 - **Decyzja:** Wszystkie grupy pól i strony opcji ACF definiujemy **w kodzie** (`acf_add_local_field_group()` / `acf_add_options_page()` na hooku `acf/init`), wersjonowane w repo. **Nie** tworzymy ich w panelu. Panel służy wyłącznie do wypełniania treści.
-- **Realizacja:** moduł `app/Acf/Acf.php` (Bootable), kontrakt `app/Acf/FieldGroup.php`, definicje w `app/Acf/Groups/`. Pierwsza grupa: `HeroSlides` (repeater na stronie opcji „Ustawienia motywu") — zasili carousel.
+- **Realizacja:** moduł `app/Acf/Acf.php` (Bootable), kontrakt `app/Acf/FieldGroup.php`, definicje w `app/Acf/Groups/`. Pierwsza grupa: `HeroSlides` (repeater), przypięta do szablonu strony `front-page.php` (Template Name „Strona główna sklepu") — zasili carousel.
 - **Uzasadnienie:** Powtarzalność, przenośność między środowiskami, kod-review, brak rozjazdu DB↔kod, brak „klikologii".
 - **Status:** ✅ Przyjęta
 

@@ -6,6 +6,14 @@ Format: `## YYYY-MM-DD HH:MM` → opis + lista plików.
 
 ---
 
+## 2026-07-28 14:13
+Zmiana lokalizacji pól hero: z globalnej strony opcji na szablon strony.
+- `front-page.php` — dodano nagłówek `Template Name: Strona główna sklepu` (staje się Page Template)
+- `app/Acf/Groups/HeroSlides.php` — lokalizacja `options_page` → `page_template == front-page.php`; usunięto nieużywany import `Acf`
+- `ARCHITECTURE.md` / `DECISIONS.md` (D-012) — zaktualizowany opis lokalizacji
+- Uwaga: strona opcji „Ustawienia motywu" jest teraz bez grup (kontener na przyszłe ustawienia globalne)
+- weryfikacja: `php -l` OK, IDE diagnostics czyste
+
 ## 2026-07-28 14:07
 Infrastruktura ACF w kodzie (deklaratywnie, D-012) + pierwsza grupa pól (slajdy hero).
 - `app/Acf/FieldGroup.php` — nowy: kontrakt grupy pól
