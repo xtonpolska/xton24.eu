@@ -15,7 +15,8 @@ get_header();
 ?>
 
 <main id="main" role="main">
-    <?php // TODO(xton): zbudować sekcje strony głównej wg designu XTON. ?>
+    <?php get_template_part('templates/parts/home/hero-carousel'); ?>
+    <?php get_template_part('templates/parts/home/categories'); ?>
 </main>
 
 <?php
