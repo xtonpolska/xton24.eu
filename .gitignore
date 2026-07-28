@@ -1,0 +1,88 @@
+# =============================================================
+#  WordPress + WooCommerce .gitignore
+#  Strategia: wersjonujemy WŁASNY kod (motyw / wtyczki), a NIE
+#  rdzeń WordPressa, sekrety, uploady, cache ani logi.
+# =============================================================
+
+# --- Sekrety / konfiguracja środowiska -----------------------
+wp-config.php
+wp-config-local.php
+.env
+.env.*
+*.local
+
+# --- Rdzeń WordPressa (zarządzany osobno / przez update) ------
+/wp-admin/
+/wp-includes/
+/wp-*.php
+!/wp-config-sample.php
+/index.php
+/xmlrpc.php
+/license.txt
+/readme.html
+/.htaccess
+/local-xdebuginfo.php
+
+# --- wp-content: ignorujemy wszystko, przywracamy własne -----
+wp-content/*
+!wp-content/themes/
+!wp-content/plugins/
+!wp-content/mu-plugins/
+
+# Domyślne motywy WordPressa
+wp-content/themes/twenty*
+
+# WooCommerce i inne wtyczki z repozytorium wp.org
+# (wersjonujemy tylko własne wtyczki — odkomentuj/dostosuj)
+wp-content/plugins/woocommerce/
+wp-content/plugins/hello.php
+wp-content/plugins/akismet/
+
+# --- Treści generowane / użytkownika -------------------------
+wp-content/uploads/
+wp-content/upgrade/
+wp-content/upgrade-temp-backup/
+wp-content/cache/
+wp-content/wc-logs/
+wp-content/uploads/woocommerce_uploads/
+wp-content/backup*/
+wp-content/backups/
+wp-content/blogs.dir/
+wp-content/advanced-cache.php
+wp-content/object-cache.php
+wp-content/db.php
+wp-content/debug.log
+*.log
+
+# WooCommerce: kopie/eksporty CSV/klucze
+wp-content/uploads/wc-logs/
+wp-content/uploads/*.csv
+sitemap.xml
+sitemap.xml.gz
+
+# --- Zależności / build motywu i wtyczek ---------------------
+node_modules/
+vendor/
+bower_components/
+.sass-cache/
+*.css.map
+*.js.map
+
+# --- Local (by Flywheel) i narzędzia lokalne -----------------
+.local/
+*.sql
+*.sql.gz
+*.tar.gz
+*.zip
+
+# --- Systemowe / edytory -------------------------------------
+.DS_Store
+Thumbs.db
+Desktop.ini
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+*~
+*.swp
+*.bak
