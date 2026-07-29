@@ -1,7 +1,7 @@
 import '../css/fonts.css';
 import '../css/app.css';
 import { initHeaderNav } from './modules/header-nav';
-import { initHeroCarousel } from './modules/hero-carousel';
+import { initSwipers } from './modules/swiper';
 
 /**
  * Punkt wejścia front-endu motywu xton-shop.
@@ -23,5 +23,5 @@ onReady(() => {
     document.documentElement.classList.add('js');
 
     initHeaderNav();
-    initHeroCarousel();
+    initSwipers();
 });

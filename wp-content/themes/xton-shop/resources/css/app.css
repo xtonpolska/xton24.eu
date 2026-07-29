@@ -295,6 +295,61 @@
     }
 }
 
+/* --- Akcje e-commerce (koszyk / konto / lista życzeń) --- */
+.site-header__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.site-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.site-action {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.3125rem;
+    color: var(--color-base-content);
+    transition: background 0.15s ease;
+}
+
+.site-action:hover {
+    background: var(--color-base-200);
+}
+
+.site-action svg {
+    width: 1.375rem; /* 22px */
+    height: 1.375rem;
+}
+
+.site-action__badge {
+    position: absolute;
+    top: 0.2rem;
+    right: 0.2rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.05rem;
+    height: 1.05rem;
+    padding: 0 0.28rem;
+    border-radius: 9999px;
+    background: var(--color-secondary);
+    color: var(--color-secondary-content);
+    font-size: 0.65rem;
+    font-weight: 600;
+    line-height: 1;
+}
+
 /*
  * ==========================================================================
  *  STOPKA (referencja Figma node 2218-4147 — light mode, D-016)
@@ -359,24 +414,12 @@
     color: #fafafa;
 }
 
-/* Tor slajdów: natywny scroll-snap (swipe + degradacja bez JS). */
-.hero-carousel__track {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
-    scrollbar-width: none;
-}
-
-.hero-carousel__track::-webkit-scrollbar {
-    display: none;
-}
-
-.hero-slide {
+/* Specyficzność `.hero-carousel .hero-slide` — bije domyślne `.swiper-slide`
+   (Swiper ustawia display:block/height:100%, ładując CSS po app.css). */
+.hero-carousel .hero-slide {
     position: relative;
     display: flex;
-    flex: 0 0 100%;
-    scroll-snap-align: start;
+    height: auto;
     align-items: flex-end;
     overflow: hidden;
     min-height: clamp(30rem, 52vw, 34rem);
@@ -483,21 +526,26 @@
     margin-top: 1rem;
 }
 
-.hero-controls__dots {
+/* Paginacja Swipera osadzona w pasku kontrolek (nie absolutnie). */
+.hero-controls__dots.swiper-pagination {
+    position: static;
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    width: auto;
 }
 
-.hero-dot {
+.hero-controls__dots .swiper-pagination-bullet {
     width: 0.5rem;
     height: 0.5rem;
+    margin: 0 !important;
     border-radius: 9999px;
     background: var(--color-base-300);
+    opacity: 1;
     transition: width 0.2s ease, background 0.2s ease;
 }
 
-.hero-dot[aria-current="true"] {
+.hero-controls__dots .swiper-pagination-bullet-active {
     width: 1.5rem;
     background: linear-gradient(90deg, #ffd600, #ffa600);
 }
@@ -526,14 +574,27 @@
 }
 
 @media (min-width: 768px) {
-    .hero-slide {
-        align-items: center;
+    /* Kolumny: tekst | grafika. Wysokość wiersza = max(tekst, kwadrat obrazu),
+       a align-items:stretch sprawia, że gdy tekst jest wyższy — obraz wypełnia. */
+    .hero-carousel .hero-slide {
+        flex-direction: row-reverse; /* media jest 1. w DOM → wraca na prawo */
+        align-items: stretch;
+        min-height: 0;
     }
 
+    /* Grafika: realna kolumna, proporcje 1:1 (kwadrat); przy wyższym tekście
+       zostaje rozciągnięta (stretch) i wypełnia (object-cover). */
     .hero-slide__media {
-        left: auto;
-        right: 0;
-        width: 62%;
+        position: relative;
+        inset: auto;
+        flex: 0 0 44%;
+        align-self: stretch;
+        aspect-ratio: 1 / 1;
+    }
+
+    .hero-slide__media img {
+        position: absolute;
+        inset: 0;
     }
 
     /* Na desktopie gradient dissolve idzie w poziomie (lewo → obraz). */
@@ -541,25 +602,21 @@
         background: linear-gradient(
             to right,
             var(--hero-ink) 0%,
-            rgba(23, 23, 23, 0.85) 26%,
-            rgba(23, 23, 23, 0) 72%
+            rgba(23, 23, 23, 0.85) 22%,
+            rgba(23, 23, 23, 0) 66%
         );
     }
 
     .hero-slide__content {
-        max-width: 52%;
+        flex: 1 1 auto;
+        max-width: 56%;
+        justify-content: center; /* wyśrodkowanie treści w pionie */
     }
 }
 
-/* Bez JS: kontrolki nieaktywne — zostaje natywny scroll-snap (swipe). */
+/* Bez JS: Swiper nie inicjuje — kontrolki nieaktywne, widać pierwszy slajd. */
 .no-js .hero-controls {
     display: none;
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .hero-carousel__track {
-        scroll-behavior: auto;
-    }
 }
 
 /*
