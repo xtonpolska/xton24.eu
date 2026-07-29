@@ -14,13 +14,15 @@
 
 declare(strict_types=1);
 
-// Ikony social (wg Figmy). Docelowe URL-e do uzupełnienia (TODO: opcje motywu).
-$xton_socials = [
-    ['icon' => 'fb', 'label' => 'Facebook', 'url' => '#'],
-    ['icon' => 'ig', 'label' => 'Instagram', 'url' => '#'],
-    ['icon' => 'yt', 'label' => 'YouTube', 'url' => '#'],
-    ['icon' => 'tiktok', 'label' => 'TikTok', 'url' => '#'],
-    ['icon' => 'linkedin', 'label' => 'LinkedIn', 'url' => '#'],
+// Akcje e-commerce w headerze. Adresy z WooCommerce, gdy wtyczka aktywna,
+// inaczej placeholder `#` (TODO: wishlista wymaga wtyczki, np. YITH).
+$xton_account_url = function_exists('wc_get_page_permalink') ? (wc_get_page_permalink('myaccount') ?: '#') : '#';
+$xton_cart_url    = function_exists('wc_get_cart_url') ? wc_get_cart_url() : '#';
+$xton_cart_count  = (function_exists('WC') && WC()->cart) ? WC()->cart->get_cart_contents_count() : 0;
+
+$xton_actions = [
+    ['icon' => 'heart', 'label' => __('Lista życzeń', 'xton-shop'), 'url' => '#'],
+    ['icon' => 'user', 'label' => __('Moje konto', 'xton-shop'), 'url' => $xton_account_url],
 ];
 
 ?><!doctype html>
@@ -85,19 +87,6 @@ $xton_socials = [
                 <?php endif; ?>
             </a>
 
-            <button
-                type="button"
-                class="site-nav-toggle"
-                data-nav-toggle
-                aria-expanded="false"
-                aria-controls="primary-navigation"
-                aria-label="<?php esc_attr_e('Menu', 'xton-shop'); ?>"
-            >
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-
             <nav id="primary-navigation" class="primary-navigation" aria-label="<?php esc_attr_e('Nawigacja główna', 'xton-shop'); ?>" data-nav>
                 <?php
                 wp_nav_menu([
@@ -111,15 +100,39 @@ $xton_socials = [
                 ?>
             </nav>
 
-            <ul class="site-social hidden shrink-0 items-center gap-4 lg:flex">
-                <?php foreach ($xton_socials as $social) : ?>
+            <?php // Prawy klaster: akcje e-commerce + hamburger (mobile). ?>
+            <div class="site-header__actions">
+                <ul class="site-actions">
+                    <?php foreach ($xton_actions as $action) : ?>
+                        <li>
+                            <a class="site-action" href="<?php echo esc_url($action['url']); ?>" aria-label="<?php echo esc_attr($action['label']); ?>">
+                                <?php echo xton_inline_svg('icons/' . $action['icon'] . '.svg'); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+                            </a>
+                        </li>
+                    <?php endforeach; ?>
                     <li>
-                        <a class="inline-flex text-base-content/60 hover:text-base-content" href="<?php echo esc_url($social['url']); ?>" aria-label="<?php echo esc_attr($social['label']); ?>" target="_blank" rel="noopener noreferrer">
-                            <?php echo xton_inline_svg('icons/' . $social['icon'] . '.svg'); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+                        <a class="site-action site-action--cart" href="<?php echo esc_url($xton_cart_url); ?>" aria-label="<?php esc_attr_e('Koszyk', 'xton-shop'); ?>">
+                            <?php echo xton_inline_svg('icons/cart.svg'); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+                            <?php if ($xton_cart_count > 0) : ?>
+                                <span class="site-action__badge"><?php echo esc_html((string) $xton_cart_count); ?></span>
+                            <?php endif; ?>
                         </a>
                     </li>
-                <?php endforeach; ?>
-            </ul>
+                </ul>
+
+                <button
+                    type="button"
+                    class="site-nav-toggle"
+                    data-nav-toggle
+                    aria-expanded="false"
+                    aria-controls="primary-navigation"
+                    aria-label="<?php esc_attr_e('Menu', 'xton-shop'); ?>"
+                >
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
         </div>
     </div>
 </header>
