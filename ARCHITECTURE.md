@@ -89,12 +89,14 @@ Obecnie brak zdefiniowanych grup pól (`Acf::GROUPS` jest pusta) — grupa `Hero
 Szablony klasyczne: `index.php`, `front-page.php`, `header.php`, `footer.php`, części w `templates/parts/`.
 
 Strona główna (`front-page.php`) składa sekcje z `templates/parts/home/`:
-- **hero carousel** (`hero-carousel.php`) — ciemny panel zamknięty w `.container` (radius 5px, element designu na jasnej stronie), treść+CTA po lewej, grafika po prawej z gradientowym „dissolve"; kontrolki poza panelem. Interakcje w `resources/js/modules/hero-carousel.ts` (natywny scroll-snap + strzałki/kropki, autoplay ~6 s, wolne przejście, `prefers-reduced-motion`, degradacja bez JS).
+- **hero carousel** (`hero-carousel.php`) — ciemny panel zamknięty w `.container` (radius 5px, element designu na jasnej stronie), treść+CTA po lewej, grafika po prawej z gradientowym „dissolve"; kontrolki poza panelem. Napędzany **Swiperem** (D-017) — autoplay ~6 s, pętla, `prefers-reduced-motion`.
 - **kategorie** (`categories.php`) — masonry/kolaż wg Figma (node 2210-3444): kafle to ciemne zdjęcia z gradientem (samo-kontrastujące na jasnej sekcji), tytuł Russo One + opis + CTA; siatka 1/2/3 kolumny ze spanami (`.cat-tile--wide`/`--tall`) na ≥1024px. Nagłówek przez reużywalny `.section-head`.
 
 Dane sekcji to placeholdery (grafiki z placehold.co, linki `#`); nazwy kategorii pochodzą z istniejącego sklepu xton24.pl. Docelowo — źródła z WooCommerce (taksonomie, obrazy).
 
 > **Konwencja:** nie nazywaj własnych klas jak komponenty DaisyUI (`.hero`, `.card`, `.btn`, `.footer`…) — kolidują z ich stylami (np. `.hero` = `display:grid; place-items:center`). Dla wrapperów używaj własnych nazw (`.hero-wrap`, `.home-hero`).
+
+> **Karuzele (D-017):** standard to **Swiper 11** przez reużywalny init `resources/js/modules/swiper.ts`. Nowy slider = wrapper `[data-swiper]` (opcje jako JSON) z `.swiper`/`.swiper-wrapper`/`.swiper-slide`; opcjonalne `.swiper-prev`/`.swiper-next`/`.swiper-pagination` mogą leżeć poza `.swiper` (wiązane w obrębie wrappera). `prefers-reduced-motion` wyłącza autoplay/animację. **Uwaga:** CSS Swipera ładuje się po `app.css` i ustawia `.swiper-slide { display:block; height:100% }` — własne style slajdu (np. flex-layout) podbijaj specyficznością (`.hero-carousel .hero-slide`), inaczej Swiper je nadpisze.
 
 **Helpery szablonów (`functions.php`):** `xton_asset($rel)` — URL statycznego assetu z `assets/` + cache-busting po `XTON_SHOP_VERSION`; `xton_inline_svg($rel)` — inline'uje SVG z `assets/` (zaufane pliki motywu) tak, że ikony używają `currentColor`; `xton_primary_menu_fallback()` — fallback menu `primary`, gdy nie przypisano menu w panelu.
 
@@ -104,7 +106,7 @@ Dane sekcji to placeholdery (grafiki z placehold.co, linki `#`); nazwy kategorii
 
 `header.php` odwzorowuje sekcję nagłówka z Figmy (node `2401-10874`) w wariancie jasnym:
 - **Górny pasek** (`.site-header__topbar`): e-mail, telefon, godziny + placeholder zmiany języka (TODO: i18n, np. Polylang).
-- **Główny pasek**: logo (`xton_inline_svg`) → nawigacja `primary` (`wp_nav_menu` + fallback) → ikony social.
+- **Główny pasek**: logo (`xton_inline_svg`) → nawigacja `primary` (`wp_nav_menu` + fallback) → akcje e-commerce (`.site-header__actions`: lista życzeń / konto / koszyk z licznikiem; adresy z WooCommerce przez `wc_get_*` gdy wtyczka aktywna, inaczej `#`).
 - **Responsywność:** `<1024px` nawigacja chowa się pod hamburgerem (`.site-nav-toggle`) i rozwija jako panel (`.primary-navigation.is-open`); sterowanie: `resources/js/modules/header-nav.ts` (a11y: `aria-expanded`, Escape, klik poza, reset przy powrocie na desktop). Podmenu: flyout na desktopie (`:hover`/`:focus-within`), inline na mobile.
 - Style nawigacji i **globalny `.container`** (wycentrowany, `max-width 1440px`, padding `24px`/`32px`) w `resources/css/app.css` (reguły poza `@layer`, by wygrywały z utilities).
 
@@ -163,4 +165,4 @@ Identyfikacja wizualna XTON (z Figmy) jako tokeny w `resources/css/app.css`:
 
 ---
 
-*Aktualizowane automatycznie. Ostatnia aktualizacja: 2026-07-28 16:49.*
+*Aktualizowane automatycznie. Ostatnia aktualizacja: 2026-07-29 15:10.*

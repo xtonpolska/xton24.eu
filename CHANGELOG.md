@@ -6,6 +6,30 @@ Format: `## YYYY-MM-DD HH:MM` → opis + lista plików.
 
 ---
 
+## 2026-07-29 15:10
+Header: zamiast ikon social — akcje e-commerce (lista życzeń / konto / koszyk).
+- `wp-content/themes/xton-shop/assets/icons/{heart,user,cart}.svg` — nowe line-icony (currentColor)
+- `wp-content/themes/xton-shop/header.php` — usunięte social; prawy klaster `.site-header__actions` (akcje + hamburger). Adresy konta/koszyka z WooCommerce gdy aktywne (`wc_get_page_permalink`/`wc_get_cart_url`), inaczej `#`; licznik koszyka z `WC()->cart` (badge widoczny gdy >0). Wishlista `#` (TODO: wtyczka)
+- `wp-content/themes/xton-shop/resources/css/app.css` — `.site-header__actions`/`.site-actions`/`.site-action` (przyciski 40px, hover bg) + `.site-action__badge` (pomarańczowy licznik)
+- weryfikacja: `php -l` OK, build OK, podgląd headera (HTTP) — ikony i badge renderują się poprawnie
+
+## 2026-07-29 15:04
+Hero: obraz 1:1 + poprawione centrowanie treści w pionie.
+- `wp-content/themes/xton-shop/resources/css/app.css`:
+  - desktop (≥768): slajd jako flex-kolumny (`row-reverse` — tekst lewo / obraz prawo), obraz `aspect-ratio:1/1` + `align-items:stretch` → kwadrat, a gdy tekst wyższy niż kwadrat, obraz wypełnia (object-cover); treść `justify-content:center` (pion)
+  - fix: reguły slajdu podbite do `.hero-carousel .hero-slide` — biły domyślne `.swiper-slide { display:block; height:100% }` (CSS Swipera ładuje się po app.css). To ono powodowało brak centrowania w pionie (slajd nie był flexem)
+- weryfikacja: build OK, podgląd przez serwer HTTP (desktop: kwadrat + tekst wyśrodkowany; mobile: bez zmian)
+
+## 2026-07-29 14:42
+Karuzele na Swiper 11 (D-017) — hero przeniesiony z custom scroll-snap na reużywalny init.
+- `wp-content/themes/xton-shop/resources/js/modules/swiper.ts` — nowy: reużywalny init `[data-swiper]` (opcje z JSON, strzałki/paginacja spoza `.swiper`, reduced-motion); moduły Navigation/Pagination/Autoplay/Keyboard/A11y/EffectFade
+- `wp-content/themes/xton-shop/resources/js/modules/hero-carousel.ts` — usunięty (zastąpiony przez `swiper.ts`)
+- `wp-content/themes/xton-shop/resources/js/app.ts` — import `initSwipers` zamiast `initHeroCarousel`
+- `wp-content/themes/xton-shop/templates/parts/home/hero-carousel.php` — markup Swipera (`.swiper`/`.swiper-wrapper`/`.swiper-slide`, opcje w `data-swiper`, `.swiper-prev/-next/-pagination` w pasku kontrolek)
+- `wp-content/themes/xton-shop/resources/css/app.css` — usunięty scroll-snap `__track`; stylizacja paginacji Swipera (statyczna, bullet gradient) zamiast custom kropek
+- `wp-content/themes/xton-shop/package.json` + `package-lock.json` — `swiper@^11` w dependencies
+- weryfikacja: `npm run typecheck` OK, build OK, podgląd przez serwer HTTP z realnym JS — Swiper działa (autoplay, paginacja, strzałki, pętla) na desktop + mobile
+
 ## 2026-07-28 16:49
 Sekcja „Kategorie" na stronie głównej — masonry/kolaż wg Figma (node 2210-3444), light mode.
 - `wp-content/themes/xton-shop/templates/parts/home/categories.php` — nowy: nagłówek sekcji + siatka masonry (kafel szeroki + wysoki + zwykłe), kafle = ciemne zdjęcia z gradientem, tytuł Russo One, opis, CTA; hover (scale obrazu, przesunięcie strzałki)

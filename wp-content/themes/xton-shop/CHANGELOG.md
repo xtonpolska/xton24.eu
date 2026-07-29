@@ -15,9 +15,9 @@ Zasady bumpowania:
 ## [Unreleased]
 ### Added
 - **Sekcja „Kategorie" na stronie głównej** — masonry/kolaż wg referencji Figma (node 2210-3444), light mode: kafle to ciemne zdjęcia z gradientem (samo-kontrastujące) z tytułem Russo One, opisem i CTA; układ 1/2/3 kolumny (spany szeroki/wysoki na ≥1024px), hover (scale + strzałka). Reużywalny nagłówek `.section-head`. Kategorie pobrane z xton24.pl; grafiki/linki placeholder.
-- **Hero carousel na stronie głównej** (frontend-design): ciemny panel zamknięty w `.container` (radius 5px), treść + CTA po lewej, grafika (placehold.co) po prawej z gradientowym „dissolve" (obraz rozpływa się w tle). Nagłówki w Russo One. Kontrolki (kropki + strzałki) poza panelem. Moduł `hero-carousel.ts`: natywny scroll-snap (swipe + degradacja bez JS), strzałki/kropki, autoplay ~6 s z pauzą (hover/focus/ukryta karta), własne wolne przejście (~700 ms), `prefers-reduced-motion`. Dane placeholder.
+- **Hero carousel na stronie głównej** (frontend-design): ciemny panel zamknięty w `.container` (radius 5px), treść + CTA po lewej, grafika (placehold.co) po prawej z gradientowym „dissolve" (obraz rozpływa się w tle). Nagłówki w Russo One. Kontrolki (kropki + strzałki) poza panelem. Napędzany **Swiperem** (D-017) przez reużywalny init `swiper.ts` — autoplay ~6 s (pauza na hover), przejście 700 ms, pętla, `prefers-reduced-motion`. Dane placeholder.
 - **Stopka sklepu wg referencji Figma (D-016), light mode:** logo + 4 kolumny (informacje firmowe, kontakt z flagami języka, na skróty, o nas), sekcja „Zaobserwuj nas" (social), blok certyfikatów (CE/GS1/UPR + flagi) i logotypów partnerów (Rzetelna Firma, Małopolska, Nowy Sącz), pasek dolny (polityka prywatności + copyright). Dane placeholder. Assety: `flags/`, `certs/` (przekolorowane na `currentColor`), `logos/`; logo i social zreużyte z headera.
-- **Header sklepu wg referencji Figma (D-016), light mode:** górny pasek (e-mail/telefon/godziny + placeholder zmiany języka) i główny (logo → nawigacja → social). Responsywny — na mobile nawigacja pod przyciskiem (hamburger, moduł `header-nav.ts`, a11y: `aria-expanded`, Escape, klik poza, powrót na desktop). Nawigacja: `wp_nav_menu` (`primary`) z fallbackiem, carety przy pozycjach z podmenu, flyout na desktopie / panel na mobile.
+- **Header sklepu wg referencji Figma (D-016), light mode:** górny pasek (e-mail/telefon/godziny + placeholder zmiany języka) i główny (logo → nawigacja → akcje e-commerce: lista życzeń / konto / koszyk z licznikiem, adresy z WooCommerce gdy aktywne). Responsywny — na mobile nawigacja pod przyciskiem (hamburger, moduł `header-nav.ts`, a11y: `aria-expanded`, Escape, klik poza, powrót na desktop). Nawigacja: `wp_nav_menu` (`primary`) z fallbackiem, carety przy pozycjach z podmenu, flyout na desktopie / panel na mobile.
 - **Globalny `.container`:** wycentrowany, `max-width: 1440px` (≈1376px treści jak w Figmie), padding `24px` (mobile) / `32px` (≥1024px).
 - **Assety statyczne** w `assets/` (`img/xton-logo.svg`, `icons/*.svg`) — pobrane z Figmy i przekolorowane na `currentColor` (sterowanie kolorem z CSS). Helpery `xton_asset()` (URL + cache-busting) i `xton_inline_svg()` (inline SVG z `assets/`).
 
@@ -32,6 +32,7 @@ Zasady bumpowania:
 - Kolejne szablony (single, page, archive, search) i bloki e-commerce z HyperUI. *(planowane)*
 
 ### Changed
+- **Karuzele na Swiper 11 (D-017):** Swiper ponownie w `dependencies`; reużywalny init `[data-swiper]` (`resources/js/modules/swiper.ts`) — hero przeniesiony z własnego scroll-snap na Swiper. Odwraca usunięcie Swipera z D-015. Kolejne slidery = sam markup `.swiper` + opcje w `data-swiper`.
 - **Sklep wyłącznie w light mode (D-014):** usunięty motyw DaisyUI `xton-dark` **oraz wyłączone wbudowane motywy DaisyUI** przez `@plugin "daisyui" { themes: false; }`. Bez tego wbudowany `dark` (z `prefersdark`) nadpisywał `xton` przy systemowym `prefers-color-scheme: dark`. Teraz `xton` (jasny) aplikuje się na `:root` zawsze.
 
 ### Removed

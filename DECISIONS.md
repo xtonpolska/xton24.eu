@@ -116,6 +116,15 @@ Format wpisu: data, decyzja, kontekst/uzasadnienie, status.
 
 ---
 
+### D-017 — Karuzele/slidery na Swiper (standard motywu)
+- **Data:** 2026-07-29
+- **Decyzja:** Wszystkie karuzele w motywie obsługuje **Swiper 11**, przez **reużywalny inicjalizator** `[data-swiper]` (`resources/js/modules/swiper.ts`). Hero na stronie głównej przeniesiony z własnego scroll-snap na Swiper. Kolejne slidery dodaje się samym markupem (`.swiper`/`.swiper-wrapper`/`.swiper-slide` + opcje w `data-swiper`).
+- **Uzasadnienie:** dojrzała biblioteka (touch, a11y, autoplay, pętla, efekty) i jeden standard zamiast pisania własnej mechaniki za każdym razem. **Odwraca** usunięcie Swipera z D-015 (usunięty wtedy razem z porzuconymi sekcjami design-first, nie z powodu wady biblioteki).
+- **Realizacja:** `swiper` w `dependencies` (package.json); strzałki/paginacja mogą leżeć POZA `.swiper` (klasy `.swiper-prev`/`.swiper-next`/`.swiper-pagination`, wiązane w obrębie wrappera); `prefers-reduced-motion` wyłącza autoplay i animację przejścia.
+- **Status:** ✅ Przyjęta
+
+---
+
 ## Decyzje otwarte / do podjęcia
 
 - **O-002 — WooCommerce w repo:** obecnie ignorowany (D-003). Do rozważenia zamrożenie konkretnej wersji w repo, jeśli zajdzie potrzeba. — **oczekuje na decyzję**
@@ -124,4 +133,4 @@ Format wpisu: data, decyzja, kontekst/uzasadnienie, status.
 
 ---
 
-*Aktualizowane automatycznie. Ostatnia aktualizacja: 2026-07-28 16:09.*
+*Aktualizowane automatycznie. Ostatnia aktualizacja: 2026-07-29 14:42.*
